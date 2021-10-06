@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
@@ -10,8 +9,28 @@ import zh from '@angular/common/locales/zh';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CoreModule } from './core/core.module';
+import { RoutesModule } from './routes/routes.module';
+import { SharedModule } from './shared';
 
 registerLocaleData(zh);
+
+// #region Startup Service
+import { Observable } from 'rxjs';
+import { StartupService } from '@core';
+export function StartupServiceFactory(startupService: StartupService): () => Observable<void> {
+  return () => startupService.load();
+}
+const APPINIT_PROVIDES = [
+  StartupService,
+  {
+    provide: APP_INITIALIZER,
+    useFactory: StartupServiceFactory,
+    deps: [StartupService],
+    multi: true
+  }
+];
+// #endregion
 
 @NgModule({
   declarations: [
@@ -19,12 +38,14 @@ registerLocaleData(zh);
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SharedModule,
+    CoreModule,
+    RoutesModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN },APPINIT_PROVIDES],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
