@@ -1,1 +1,26 @@
-<p>home works!</p>
+<div class="home">
+  <app-wy-carousel
+    [activeIndex]="activeIndex"
+    (changeSlide)="onChangeSlide($event)"
+  >
+    <nz-carousel
+      nzEffect="fade"
+      nzAutoPlay
+      [nzDotRender]="dot"
+      (nzBeforeChange)="onBeforeChange($event)"
+    >
+      <div
+        class="carousel-item"
+        nz-carousel-content
+        *ngFor="let banner of banners"
+      >
+        <a class="banner-item" [href]="banner.url" target="_blank">
+          <img [src]="banner.imageUrl" alt="" srcset="" />
+        </a>
+      </div>
+    </nz-carousel>
+    <ng-template #dot let-number>
+      <i class="dot" [class.active]="activeIndex === number"></i>
+    </ng-template>
+  </app-wy-carousel>
+</div>

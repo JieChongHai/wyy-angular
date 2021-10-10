@@ -21,7 +21,8 @@ export class HomeService {
       .get<{ banners: Banner[] }>(url)
       .pipe(map((res) => res.banners));
   }
-
+  
+  /** 获取歌单分类,包含 category 信息 */
   getHotTags(): Observable<HotTag[]> {
     const url = `${this.baseURL}/playlist/hot`;
     return this.http.get<{ tags: HotTag[] }>(url).pipe(
@@ -33,6 +34,7 @@ export class HomeService {
     );
   }
 
+  /** 获取推荐歌单 */
   getPerosonalSheetList(): Observable<SongSheet[]> {
     const url = `${this.baseURL}/personalized`;
     return this.http

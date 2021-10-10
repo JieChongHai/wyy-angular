@@ -1,0 +1,24 @@
+<div class="carousel">
+  <div class="wrap">
+    <!-- 左箭头 -->
+    <i
+      nz-icon
+      class="arrow left"
+      nzType="left"
+      nzTheme="outline"
+      (click)="onChangeSlide('pre')"
+    ></i>
+    <!-- 轮播图 -->
+    <ng-content></ng-content>
+    <!-- 右箭头 -->
+    <i
+      nz-icon
+      class="arrow right"
+      nzType="right"
+      nzTheme="outline"
+      (click)="onChangeSlide('next')"
+    ></i>
+  </div>
+</div>
+
+

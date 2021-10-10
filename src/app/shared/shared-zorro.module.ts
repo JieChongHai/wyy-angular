@@ -3,6 +3,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -10,5 +11,6 @@ export const SHARED_ZORRO_MODULES = [
 
   NzLayoutModule,
   NzMenuModule,
-  NzInputModule
+  NzInputModule,
+  NzCarouselModule
 ];
