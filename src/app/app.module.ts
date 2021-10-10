@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { RoutesModule } from './routes/routes.module';
 import { SharedModule } from './shared';
+import { ServicesModule } from './services/services.module';
 
 registerLocaleData(zh);
 
@@ -41,9 +42,11 @@ const APPINIT_PROVIDES = [
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    
     SharedModule,
     CoreModule,
     RoutesModule,
+    ServicesModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN },APPINIT_PROVIDES],
   bootstrap: [AppComponent]
