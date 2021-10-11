@@ -57,7 +57,10 @@
             "styles": [
               "src/styles.less"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies":[
+              "query-string"
+            ]
           },
           "configurations": {
             "production": {

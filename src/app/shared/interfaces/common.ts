@@ -37,6 +37,12 @@ export interface SingerDetail {
   hotSongs: Song[];
 }
 
+export interface SingerParams {
+  offset: number;
+  limit: number;
+  cat?: string;
+}
+
 
 // 歌曲
 export interface Song {

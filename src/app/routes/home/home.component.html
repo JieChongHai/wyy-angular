@@ -23,4 +23,47 @@
       <i class="dot" [class.active]="activeIndex === number"></i>
     </ng-template>
   </app-wy-carousel>
+
+  <!-- 主体内容 -->
+  <div class="main">
+    <div class="wrap">
+      <div class="left">
+        <div class="sec">
+          <div class="up">
+            <div class="navs">
+              <h2><i></i><a>热门推荐</a></h2>
+              <nav>
+                <a *ngFor="let tag of hotTags">{{ tag.name }}</a>
+              </nav>
+            </div>
+            <a href=""
+              >更多<i nz-icon nzType="arrow-right" nzTheme="outline"></i
+            ></a>
+          </div>
+          <div class="down">
+            <div class="down-wrap">
+              <app-single-sheet
+                class="sheet-item"
+                *ngFor="let sheet of sheetList"
+                [sheet]="sheet"
+              ></app-single-sheet>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <app-member-card></app-member-card>
+        <div class="settled-singer">
+          <div class="tit"><b>入驻歌手</b></div>
+          <div class="list">
+            <app-singer-card
+              class="card-item"
+              *ngFor="let singer of singers"
+              [singer]="singer"
+            ></app-singer-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

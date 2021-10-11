@@ -21,7 +21,7 @@ export class HomeService {
       .get<{ banners: Banner[] }>(url)
       .pipe(map((res) => res.banners));
   }
-  
+
   /** 获取歌单分类,包含 category 信息 */
   getHotTags(): Observable<HotTag[]> {
     const url = `${this.baseURL}/playlist/hot`;

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule, Type } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { SingleSheetComponent } from './components/single-sheet/single-sheet.component';
+import { PlayCountPipe } from './pipes/play-count.pipe';
 
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
 
@@ -11,9 +13,10 @@ import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
 const THIRD_MODULES: Array<Type<any>> = [];
 // #endregion
 
-// #region your componets & directives
-const COMPONENTS: Array<Type<any>> = [];
+// #region your componets & directives & pipes
+const COMPONENTS: Array<Type<any>> = [SingleSheetComponent];
 const DIRECTIVES: Array<Type<any>> = [];
+const PIPES: Array<Type<any>> = [PlayCountPipe];
 // #endregion
 
 const COMMON_MODULES = [
@@ -32,6 +35,7 @@ const COMMON_MODULES = [
   declarations: [
     ...COMPONENTS,
     ...DIRECTIVES,
+    ...PIPES
   ],
   exports: [
     ...COMMON_MODULES,
@@ -39,6 +43,7 @@ const COMMON_MODULES = [
     ...THIRD_MODULES,
     ...COMPONENTS,
     ...DIRECTIVES,
+    ...PIPES
   ],
 })
 export class SharedModule {}
