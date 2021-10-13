@@ -20,7 +20,8 @@ export class SingerService {
     private http: HttpClient,
     @Inject(API_CONFIG) private baseURL: string
   ) {}
-
+  
+  /** 入驻歌手分类列表 */ 
   getEnterSinger(args = defaultParams): Observable<Singer[]> {
     const url = `${this.baseURL}/artist/list`;
     const params = new HttpParams({ fromString: stringify(args) });

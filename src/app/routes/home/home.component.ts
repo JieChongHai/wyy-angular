@@ -1,8 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { map, pluck, switchMap } from 'rxjs/operators';
 import { HomeService } from 'src/app/services/home.service';
+import { SheetService } from 'src/app/services/sheet.service';
 import { SingerService } from 'src/app/services/singer.service';
-import { Banner, HotTag, Singer, SongSheet } from 'src/app/shared/interfaces/common';
+import { SongService } from 'src/app/services/song.service';
+import {
+  Banner,
+  HotTag,
+  Singer,
+  SongSheet,
+} from 'src/app/shared/interfaces/common';
 import { ArrowType } from './components/wy-carousel/wy-carousel.component';
 
 @Component({
@@ -25,22 +34,21 @@ export class HomeComponent implements OnInit {
   @ViewChild(NzCarouselComponent, { static: true })
   private nzCarousel!: NzCarouselComponent;
 
-  constructor(private homeServ: HomeService,private singerServ: SingerService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private sheetServ: SheetService,
+    private songServe: SongService
+  ) {}
 
   ngOnInit(): void {
-    this.homeServ.getBanners().subscribe((banners) => {
-      this.banners = banners;
-    });
-    this.homeServ.getHotTags().subscribe((tags) => {
-      this.hotTags = tags;
-    });
-    this.homeServ.getPerosonalSheetList().subscribe((sheetList) => {
-      this.sheetList = sheetList;
-    });
-
-    this.singerServ.getEnterSinger().subscribe((singers) => {
-      this.singers = singers
-    });
+    this.route.data
+      .pipe(map((res) => res.data))
+      .subscribe(([banners, tags, sheetList, singers]) => {
+        this.banners = banners;
+        this.hotTags = tags;
+        this.sheetList = sheetList;
+        this.singers = singers;
+      });
   }
 
   onBeforeChange({ from, to }: { from: number; to: number }): void {
@@ -48,6 +56,18 @@ export class HomeComponent implements OnInit {
   }
 
   onChangeSlide(type: ArrowType): void {
-    this.nzCarousel[type]()
+    this.nzCarousel[type]();
+  }
+
+  onPlaySheet(id: number): void {
+    this.sheetServ
+      .getSongSheetDetail(id)
+      .pipe(
+        pluck('tracks'),
+        switchMap((tracks) => this.songServe.getSongList(tracks))
+      )
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }
