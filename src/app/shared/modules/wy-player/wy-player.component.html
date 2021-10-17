@@ -16,20 +16,18 @@
         <i class="mask"></i>
       </div>
       <div class="play">
-        <div class="words clearfix" [hidden]="true">
-          <p class="ellipsis">歌名</p>
-          <ul class="songs clearfix">
+        <div class="words clearfix hide">
+          <p class="ellipsis" style="margin-bottom: 0">歌名</p>
+          <ul class="songs clearfix" style="margin-bottom: 0">
             <li><a href="">歌手一</a>/</li>
             <li><a href="">歌手二</a></li>
           </ul>
         </div>
         <div class="bar">
           <div class="slider-wrap">
-            <div>进度条</div>
+            <app-wy-slider></app-wy-slider>
           </div>
-          <span class="time">
-            <em>02:11</em> / 4:00
-          </span>
+          <span class="time" [hidden]="true"> <em>02:11</em> / 4:00 </span>
         </div>
       </div>
       <!-- 右侧4个按钮 -->
@@ -41,6 +39,10 @@
         <i class="volume" tite="音量"></i>
         <i class="loop" tite="循环"></i>
         <p class="open"><span></span></p>
+
+        <div class="control-vol">
+          <app-wy-slider [vertical]="true" [(ngModel)]="volume"></app-wy-slider>
+        </div>
       </div>
     </div>
   </div>

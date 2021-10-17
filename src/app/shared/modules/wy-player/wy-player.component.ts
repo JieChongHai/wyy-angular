@@ -7,6 +7,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyPlayerComponent implements OnInit {
+  volume = 35
 
   constructor() { }
 

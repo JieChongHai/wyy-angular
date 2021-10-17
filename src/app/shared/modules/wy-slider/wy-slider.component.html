@@ -1,0 +1,27 @@
+<!-- 
+  水平方向：
+    track: width
+    handle: left
+  垂直方向：
+    track: height
+    handle: bottom
+ -->
+<!-- 背景条 -->
+<div class="wy-slider" [ngClass]="{ 'wy-slider-vertical': vertical }" #wySlider>
+  <!-- 缓冲条 -->
+  <app-wy-slider-track
+    [vertical]="vertical"
+    [buffer]="true"
+    [length]="bufferOffset"
+  ></app-wy-slider-track>
+  <!-- 进度条 -->
+  <app-wy-slider-track
+    [vertical]="vertical"
+    [length]="offset"
+  ></app-wy-slider-track>
+  <!-- 滑块 -->
+  <app-wy-slider-handle
+    [vertical]="vertical"
+    [offset]="offset"
+  ></app-wy-slider-handle>
+</div>
