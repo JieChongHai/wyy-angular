@@ -80,6 +80,10 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/app/store/store-devtools/index.ts",
+                  "with": "src/app/store/store-devtools/index.prod.ts"
                 }
               ],
               "outputHashing": "all"

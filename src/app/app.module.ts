@@ -13,6 +13,7 @@ import { CoreModule } from './core/core.module';
 import { RoutesModule } from './routes/routes.module';
 import { SharedModule } from './shared';
 import { ServicesModule } from './services/services.module';
+import { NgxStoreModule } from './store';
 
 registerLocaleData(zh);
 
@@ -47,6 +48,7 @@ const APPINIT_PROVIDES = [
     CoreModule,
     RoutesModule,
     ServicesModule,
+    NgxStoreModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN },APPINIT_PROVIDES],
   bootstrap: [AppComponent]
