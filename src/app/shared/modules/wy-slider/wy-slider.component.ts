@@ -13,9 +13,9 @@ import {
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { getPercent, limitNumberInRange } from '@shared'
-import { EMPTY, empty, fromEvent, merge, Observable, Subscription } from 'rxjs'
+import { fromEvent, merge, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, pluck, takeUntil, tap } from 'rxjs/operators'
-import { getElementOffset, sliderEvent, SliderEventObserverConfig } from './wy-slider-helper'
+import { getElementOffset, silentEvent, SliderEventObserverConfig } from './wy-slider-helper'
 
 @Component({
   selector: 'app-wy-slider',
@@ -47,12 +47,12 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   offset = 0 // 与 value 相同，只供子组件使用
   isDragging = false // 是否处在拖动状态
 
-  private dragStart$: Observable<number> | undefined
-  private dragMove$: Observable<number> | undefined
-  private dragEnd$: Observable<Event> | undefined
-  private dragStartSub: Subscription | null = null
-  private dragMoveSub: Subscription | null = null
-  private dragEndSub: Subscription | null = null
+  private dragStart$?: Observable<number>
+  private dragMove$?: Observable<number>
+  private dragEnd$?: Observable<Event>
+  private dragStartSub?: Subscription | null
+  private dragMoveSub?: Subscription | null
+  private dragEndSub?: Subscription | null
 
   constructor(@Inject(DOCUMENT) private doc: Document, private cdr: ChangeDetectorRef) {}
 
@@ -86,27 +86,28 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   createDraggingObservables(): void {
     const data = this.getConfigData(this.vertical)
     data.forEach((source) => {
-      const { start, move, end, filterEvent, pluckKey } = source
+      const { start, move, end, filter: filterFunc = () => true, pluckKey } = source
       source.end$ = fromEvent(this.doc, end)
       source.startPlucked$ = fromEvent(this.sliderDom, start).pipe(
-        filter(filterEvent),
-        tap(sliderEvent),
-        pluck(...pluckKey),
-        map((position) => this.findClosestValue(position as number))
+        filter(filterFunc),
+        tap(silentEvent),
+        pluck<Event, number>(...pluckKey),
+        map((position: number) => this.findClosestValue(position))
       )
-      source.moveResolved$ = fromEvent(this.sliderDom, move).pipe(
-        filter(filterEvent),
-        tap(sliderEvent),
-        pluck(...pluckKey),
+      source.moveResolved$ = fromEvent(this.doc, move).pipe(
+        filter(filterFunc),
+        tap(silentEvent),
+        pluck<Event, number>(...pluckKey),
         distinctUntilChanged(),
-        map((position) => this.findClosestValue(position as number)),
+        map((position: number) => this.findClosestValue(position)),
+        distinctUntilChanged(),
         takeUntil(source.end$)
       )
     })
 
-    this.dragStart$ = merge(...data.map((d) => d.startPlucked$ || EMPTY))
-    this.dragMove$ = merge(...data.map((d) => d.moveResolved$ || EMPTY))
-    this.dragEnd$ = merge(...data.map((d) => d.end$ || EMPTY))
+    this.dragStart$ = merge(...data.map((d) => d.startPlucked$!))
+    this.dragMove$ = merge(...data.map((d) => d.moveResolved$!))
+    this.dragEnd$ = merge(...data.map((d) => d.end$!))
   }
 
   // 获取配置对象
@@ -116,14 +117,13 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
       start: 'mousedown',
       move: 'mousemove',
       end: 'mouseup',
-      filterEvent: (e: MouseEvent) => e instanceof MouseEvent,
       pluckKey: [orientField],
     }
     const touchData: SliderEventObserverConfig = {
       start: 'touchstart',
       move: 'touchmove',
       end: 'touchend',
-      filterEvent: (e: TouchEvent) => e instanceof TouchEvent,
+      filter: (e: MouseEvent | TouchEvent) => e instanceof TouchEvent,
       pluckKey: ['touches', '0', orientField],
     }
 
@@ -159,6 +159,15 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     }
   }
 
+  private toggleDragMoving(movable: boolean) {
+    this.isDragging = movable
+    if (movable) {
+      this.subscribeDrag(['move', 'end'])
+    } else {
+      this.unsubscribeDrag(['move', 'end'])
+    }
+  }
+
   // 处理拖动开始事务
   private onDragStart(value: number) {
     console.log('onDragStart')
@@ -178,15 +187,6 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     this.toggleDragMoving(false)
   }
 
-  private toggleDragMoving(movable: boolean) {
-    this.isDragging = movable
-    if (movable) {
-      this.subscribeDrag(['move', 'end'])
-    } else {
-      this.unsubscribeDrag(['move', 'end'])
-    }
-  }
-
   private findClosestValue(position: number): number {
     // 获取滑块总长
     const sliderLength = this.sliderDom[this.vertical ? 'clientHeight' : 'clientWidth']
@@ -196,8 +196,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
     // 滑块当前位置 / 滑块总长
     const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1)
-    const ratioTrue = this.vertical ? 1 - ratio : ratio
-    return ratioTrue * (this.wyMax - this.wyMin) + this.wyMin
+    return (this.vertical ? 1 - ratio : ratio) * (this.wyMax - this.wyMin) + this.wyMin
   }
 
   private setValue(value: number, needCheck = false) {
