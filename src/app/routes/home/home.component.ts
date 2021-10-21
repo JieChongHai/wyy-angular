@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { Observable } from 'rxjs';
 import { map, pluck, switchMap } from 'rxjs/operators';
 import { HomeService } from 'src/app/services/home.service';
 import { SheetService } from 'src/app/services/sheet.service';
@@ -12,6 +14,9 @@ import {
   Singer,
   SongSheet,
 } from 'src/app/shared/interfaces/common';
+import { NgxStoreModule } from 'src/app/store';
+import { decrement, increment, reset } from 'src/app/store/actions/counter.actions';
+import { SetCurrentIndex, SetPlayList, SetSongList } from 'src/app/store/actions/player.actions';
 import { ArrowType } from './components/wy-carousel/wy-carousel.component';
 
 @Component({
@@ -37,8 +42,10 @@ export class HomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sheetServ: SheetService,
-    private songServe: SongService
-  ) {}
+    private songServe: SongService,
+    private store$: Store<NgxStoreModule>
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.data
@@ -66,8 +73,22 @@ export class HomeComponent implements OnInit {
         pluck('tracks'),
         switchMap((tracks) => this.songServe.getSongList(tracks))
       )
-      .subscribe((res) => {
-        console.log(res);
+      .subscribe((list) => {
+        this.store$.dispatch(SetSongList({songList: list}))
+        this.store$.dispatch(SetPlayList({playList: list}))
+        this.store$.dispatch(SetCurrentIndex({currentIndex: 0}))
       });
   }
+
+  // increment() {
+  //   this.store.dispatch(increment());
+  // }
+ 
+  // decrement() {
+  //   this.store.dispatch(decrement());
+  // }
+ 
+  // reset() {
+  //   this.store.dispatch(reset());
+  // }
 }

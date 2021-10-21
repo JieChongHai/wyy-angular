@@ -102,3 +102,16 @@ export interface SearchResult {
   playlists?: SongSheet[];
   songs?: Song[];
 }
+
+export interface PlayMode {
+  type: 'loop' | 'random' | 'singleLoop';
+  label: '循环' | '随机' | '单曲循环';
+}
+
+export enum CurrentActions {
+  Add,
+  Play,
+  Delete,
+  Clear,
+  Other
+}
