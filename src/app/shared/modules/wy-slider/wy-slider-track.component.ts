@@ -9,7 +9,7 @@ import { WySliderStyle } from './wy-slider-helper';
 
 @Component({
   selector: 'app-wy-slider-track',
-  template: ` <div class="wy-slider-track" [ngStyle]="style"></div> `,
+  template: ` <div class="wy-slider-track" [class.buffer]="buffer" [ngStyle]="style"></div> `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CurrentActions, PlayMode, Song } from 'src/app/shared/interfaces/common';
+import { CurrentActions, PlayMode, Song } from '@shared/interfaces/common';
 
 export const SetPlaying = createAction('[player] Set playing', props<{ playing: boolean }>());
 export const SetPlayList = createAction('[player] Set playList', props<{ playList: Song[] }>());

@@ -1,4 +1,4 @@
-<div class="m-player">
+<div class="m-player" (click)="selfClick = true">
   <div class="lock">
     <div class="left"><i></i></div>
   </div>
@@ -7,27 +7,35 @@
     <div class="wrap">
       <!-- 左侧3个按钮 -->
       <div class="btns">
-        <i class="prev"></i>
-        <i class="toggle"></i>
-        <i class="next"></i>
+        <i class="prev" (click)="onPrev(currentIndex - 1)"></i>
+        <i class="toggle" [ngClass]="{ playing: isPlaying }" (click)="onToggle()"></i>
+        <i class="next" (click)="onNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
-        <img src="" alt="" />
+        <img [src]="picUrl" />
         <i class="mask"></i>
       </div>
       <div class="play">
-        <div class="words clearfix hide">
-          <p class="ellipsis" style="margin-bottom: 0">歌名</p>
+        <div class="words clearfix">
+          <p class="ellipsis" style="margin-bottom: 0">{{ currentSong?.name }}</p>
           <ul class="songs clearfix" style="margin-bottom: 0">
-            <li><a href="">歌手一</a>/</li>
-            <li><a href="">歌手二</a></li>
+            <li *ngFor="let item of currentSong?.ar; last as isLast">
+              <a href="">{{ item.name }}</a>
+              <span [hidden]="isLast">/</span>
+            </li>
           </ul>
         </div>
         <div class="bar">
           <div class="slider-wrap">
-            <app-wy-slider></app-wy-slider>
+            <app-wy-slider
+              [bufferOffset]="bufferPercent"
+              [(ngModel)]="percent"
+              (afterDragEnd)="onPercentChange($event)"
+            ></app-wy-slider>
           </div>
-          <span class="time" [hidden]="true"> <em>02:11</em> / 4:00 </span>
+          <span class="time">
+            <em>{{ currentTime | formatTime }}</em> / {{ duration | formatTime }}
+          </span>
         </div>
       </div>
       <!-- 右侧4个按钮 -->
@@ -36,15 +44,28 @@
         <i class="share" tite="分享"></i>
       </div>
       <div class="ctrl">
-        <i class="volume" tite="音量"></i>
-        <i class="loop" tite="循环"></i>
+        <i class="volume" tite="音量" (click)="toggleVolumnPanel()"></i>
+        <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="onChangeMode()"></i>
         <p class="open"><span></span></p>
 
-        <div class="control-vol">
-          <app-wy-slider [vertical]="true" [(ngModel)]="volume"></app-wy-slider>
+        <div class="control-vol" [hidden]="!showVolumnPanel">
+          <app-wy-slider
+            [vertical]="true"
+            [(ngModel)]="volume"
+            (ngModelChange)="onVolumeChange($event)"
+          ></app-wy-slider>
         </div>
       </div>
     </div>
   </div>
-  <audio #audio [src]="currentSongURL" (canplay)="onCanPlay()"></audio>
+
+  <!-- 正在播放的歌曲 -->
+  <audio
+    #audio
+    [src]="currentSongURL"
+    (canplay)="onCanPlay()"
+    (timeupdate)="onTimeUpdate($event)"
+    (ended)="onEnded()"
+    (error)="onError()"
+  ></audio>
 </div>

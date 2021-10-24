@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store'
-import { CurrentActions, PlayMode, Song } from 'src/app/shared/interfaces/common'
+import { CurrentActions, PlayMode, PlayModeLabel, PlayModeType, Song } from '@shared/interfaces/common'
 import {
   SetCurrentAction,
   SetCurrentIndex,
@@ -13,7 +13,7 @@ export const initialState: PlayState = {
   playing: false,
   songList: [],
   playList: [],
-  playMode: { type: 'loop', label: '循环' },
+  playMode: { type: PlayModeType.Loop, label: PlayModeLabel.Loop },
   currentIndex: -1,
   currentAction: CurrentActions.Other,
 }

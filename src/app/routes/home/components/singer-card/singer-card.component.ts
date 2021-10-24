@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Singer } from 'src/app/shared/interfaces/common';
+import { Singer } from '@shared/interfaces/common';
 
 @Component({
   selector: 'app-singer-card',

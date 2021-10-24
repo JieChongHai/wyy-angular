@@ -22,6 +22,8 @@
     ],
     "paths": {
       "@shared": ["src/app/shared/index"],
+      "@shared/interfaces/*": ["src/app/shared/interfaces/*"],
+      "@shared/untils": ["src/app/shared/untils/index"],
       "@core": ["src/app/core/index"],
       "@env/*": ["src/environments/*"]
     }

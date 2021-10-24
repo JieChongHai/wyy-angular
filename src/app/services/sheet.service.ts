@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, } from 'rxjs';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { stringify } from 'query-string';
-import { SheetList, SongSheet } from '../shared/interfaces/common';
+import { SheetList, SongSheet } from '@shared/interfaces/common';
 import { map } from 'rxjs/operators';
 
 export interface SheetParams {

@@ -13,7 +13,7 @@ import {
   HotTag,
   Singer,
   SongSheet,
-} from 'src/app/shared/interfaces/common';
+} from '@shared/interfaces/common';
 import { NgxStoreModule } from 'src/app/store';
 import { decrement, increment, reset } from 'src/app/store/actions/counter.actions';
 import { SetCurrentIndex, SetPlayList, SetSongList } from 'src/app/store/actions/player.actions';

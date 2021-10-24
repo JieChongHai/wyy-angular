@@ -13,7 +13,7 @@ import {
   HotTag,
   Singer,
   SongSheet,
-} from 'src/app/shared/interfaces/common';
+} from '@shared/interfaces/common';
 
 export type HomeData = [Banner[], HotTag[], SongSheet[], Singer[]];
 

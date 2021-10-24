@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Singer, SingerParams } from '../shared/interfaces/common';
+import { Singer, SingerParams } from '@shared/interfaces/common';
 import { API_CONFIG, ServicesModule } from './services.module';
 import { stringify } from 'query-string';
 

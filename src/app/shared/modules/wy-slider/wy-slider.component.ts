@@ -10,9 +10,11 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   forwardRef,
+  Output,
+  EventEmitter,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { getPercent, limitNumberInRange } from '@shared'
+import { getPercent, limitNumberInRange } from '@shared/untils'
 import { fromEvent, merge, Observable, Subscription } from 'rxjs'
 import { distinctUntilChanged, filter, map, pluck, takeUntil, tap } from 'rxjs/operators'
 import { getElementOffset, silentEvent, SliderEventObserverConfig } from './wy-slider-helper'
@@ -39,6 +41,8 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   @Input() wyMax = 100
   /** 缓冲进度百分比 */
   @Input() bufferOffset = 0
+
+  @Output() afterDragEnd = new EventEmitter()
 
   @ViewChild('wySlider', { static: true }) wySlider!: ElementRef
   private sliderDom!: HTMLElement
@@ -170,21 +174,19 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
   // 处理拖动开始事务
   private onDragStart(value: number) {
-    console.log('onDragStart')
     this.toggleDragMoving(true)
     this.setValue(value)
   }
 
   // 处理拖动事务
   private onDragMove(value: number) {
-    console.log('onDragMove')
     this.setValue(value)
   }
 
   // 处理拖动结束事务
   private onDragEnd() {
-    console.log('onDragEnd')
     this.toggleDragMoving(false)
+    this.afterDragEnd.emit(this.value)
   }
 
   private findClosestValue(position: number): number {
@@ -206,11 +208,10 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
       }
       this.value = this.formatValue(value)
       this.updateTrackAndHandles()
-    } else {
-      if (this.value !== value) {
-        this.value = value
-        this.updateTrackAndHandles()
-      }
+    } else if (!this.valuesEqual(this.value, value)) {
+      this.value = value
+      this.updateTrackAndHandles()
+      this.onChanged(this.value)
     }
   }
 
@@ -232,5 +233,12 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
   // 判断是否是NAN
   private assertValueValid(value: number): boolean {
     return isNaN(typeof value !== 'number' ? parseFloat(value) : value)
+  }
+
+  private valuesEqual(valA: number | null, valB: number | null): boolean {
+    if (typeof valA !== typeof valB) {
+      return false
+    }
+    return valA === valB
   }
 }

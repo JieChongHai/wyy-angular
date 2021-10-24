@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { SongSheet } from '../../interfaces/common';
+import { SongSheet } from '@shared/interfaces/common';
 
 @Component({
   selector: 'app-single-sheet',
