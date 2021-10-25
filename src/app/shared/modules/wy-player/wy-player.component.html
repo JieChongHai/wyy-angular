@@ -46,7 +46,7 @@
       <div class="ctrl">
         <i class="volume" tite="音量" (click)="toggleVolumnPanel()"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="onChangeMode()"></i>
-        <p class="open"><span></span></p>
+        <p class="open" (click)="toggleListPanel()"><span></span></p>
 
         <div class="control-vol" [hidden]="!showVolumnPanel">
           <app-wy-slider
@@ -56,6 +56,15 @@
           ></app-wy-slider>
         </div>
       </div>
+      <!-- 播放列表面板 -->
+      <app-wy-player-panel
+        [currentSong]="currentSong"
+        [songList]="songList"
+        [currentIndex]="currentIndex"
+        [show]="showPanel"
+        (closePanel)="showPanel = false"
+        (changeSong)="onChangeSong($event)"
+      ></app-wy-player-panel>
     </div>
   </div>
 

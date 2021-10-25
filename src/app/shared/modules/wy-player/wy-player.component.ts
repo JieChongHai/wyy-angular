@@ -164,16 +164,24 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //#region 右侧4个按钮
   toggleVolumnPanel(): void {
-    this.showVolumnPanel = !this.showVolumnPanel
-
-    if (this.showVolumnPanel) {
+    this.togglePanel('showVolumnPanel')
+  }
+  toggleListPanel(): void {
+    if (this.songList.length) {
+      this.togglePanel('showPanel')
+    }
+  }
+  togglePanel(type: any): void {
+    // ;(<any>this[type as keyof this]) = !this[type as keyof this]
+    this[type] = !this[type]
+    if (this[type]) {
       if (!this.winClick) {
         this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
           if (this.selfClick) {
-            this.showVolumnPanel = true
             this.selfClick = false
           } else {
-            this.showVolumnPanel = false
+            this.showPanel && (this.showPanel = false)
+            this.showVolumnPanel && (this.showVolumnPanel = false)
             this.winClick?.unsubscribe()
             this.winClick = undefined
           }
@@ -222,6 +230,11 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.bufferPercent = 0
   }
   //#endregion
+
+  // 在播放面板上切换歌曲
+  onChangeSong(song: Song): void {
+    this.updateCurrentIndex(this.songList, song)
+  }
 
   onPercentChange(per: number) {
     if (!this.currentSong) {
