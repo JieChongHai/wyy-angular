@@ -25,6 +25,7 @@
       "@shared": ["src/app/shared/index"],
       "@shared/interfaces/*": ["src/app/shared/interfaces/*"],
       "@shared/untils": ["src/app/shared/untils/index"],
+      "@store/*": ["src/app/store/*"],
       "@core": ["src/app/core/index"],
       "@env/*": ["src/environments/*"]
     }

@@ -60,7 +60,6 @@
       <app-wy-player-panel
         [currentSong]="currentSong"
         [songList]="songList"
-        [currentIndex]="currentIndex"
         [show]="showPanel"
         (closePanel)="showPanel = false"
         (changeSong)="onChangeSong($event)"
@@ -72,6 +71,7 @@
   <audio
     #audio
     [src]="currentSongURL"
+    [preload]="audioPreload"
     (canplay)="onCanPlay()"
     (timeupdate)="onTimeUpdate($event)"
     (ended)="onEnded()"

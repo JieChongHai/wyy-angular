@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { StoreModule } from '@ngrx/store'
 import { extModules } from './store-devtools';
-import { counterReducer } from './reducers/counter.reducer';
 import { playerReducer } from './reducers/player.reducer';
 
 @NgModule({

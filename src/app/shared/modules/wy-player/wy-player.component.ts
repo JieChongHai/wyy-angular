@@ -66,6 +66,10 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.currentSong?.al?.picUrl || '//s4.music.126.net/style/web2/img/default/default_album.jpg'
   }
 
+  get audioPreload(): string {
+    return this.currentSongURL ? 'metadata' : 'none'
+  }
+
   destroy$ = new Subject()
   selfClick = false
   winClick?: Subscription
@@ -124,7 +128,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private watchCurrentAction(action: CurrentActions) {}
 
-  //#region 左侧3个按钮操作
+  //#region 左侧3个按钮（操作的是播放列表）
   onPrev(index: number): void {
     const playListLen = this.playList.length
     if (!this.isSongReady || playListLen === 1) {
@@ -133,6 +137,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     const prevIndex = index < 0 ? playListLen - 1 : index // 如果越界，从最后一首开始播放
     this.updateIndex(prevIndex)
   }
+
   onNext(index: number): void {
     const playListLen = this.playList.length
     if (!this.isSongReady || playListLen === 1) {
@@ -141,6 +146,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     const nextIndex = index >= playListLen ? 0 : index // 如果越界，从第一首开始播放
     this.updateIndex(nextIndex)
   }
+
   onToggle(): void {
     if (!this.currentSong) {
       // 在没有选择歌曲的情况，自动选一首歌
@@ -166,11 +172,13 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleVolumnPanel(): void {
     this.togglePanel('showVolumnPanel')
   }
+
   toggleListPanel(): void {
     if (this.songList.length) {
       this.togglePanel('showPanel')
     }
   }
+
   togglePanel(type: any): void {
     // ;(<any>this[type as keyof this]) = !this[type as keyof this]
     this[type] = !this[type]
@@ -192,9 +200,11 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.winClick = undefined
     }
   }
+
   onVolumeChange(value: number): void {
     this.audioDom.volume = value / 100
   }
+
   onChangeMode(): void {
     this.store$.dispatch(SetPlayMode({ playMode: MODE_TYPES[++this.changeModeCount % 3] }))
   }
@@ -215,6 +225,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.bufferPercent = (buffered.end(0) / this.duration) * 100
     }
   }
+
   onEnded() {
     this.isPlaying = false
     if (this.currentMode.type === PlayModeType.SingleLoop) {
@@ -225,6 +236,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.onNext(this.currentIndex + 1)
     }
   }
+
   onError() {
     this.isPlaying = false
     this.bufferPercent = 0
@@ -233,7 +245,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 在播放面板上切换歌曲
   onChangeSong(song: Song): void {
-    this.updateCurrentIndex(this.songList, song)
+    this.updateCurrentIndex(this.playList, song)
   }
 
   onPercentChange(per: number) {
@@ -247,12 +259,13 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
   }
 
+  // 更新当前歌曲在播放列表的索引
   private updateIndex(index: number) {
     this.store$.dispatch(SetCurrentIndex({ currentIndex: index }))
     this.isSongReady = false
   }
 
-  // 更新当前歌曲在播放列表的索引
+  // 在切换模式后更新当前歌曲在播放列表的索引
   private updateCurrentIndex(list: Song[], song: Song) {
     const newIndex = list.findIndex((item) => item.id === song.id)
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }))
