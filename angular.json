@@ -57,6 +57,11 @@
             "styles": [
               "src/styles.less"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/styles"
+              ]
+            },
             "scripts": [],
             "allowedCommonJsDependencies":[
               "query-string"
