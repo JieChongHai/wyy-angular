@@ -16,6 +16,7 @@ import {
   getSongList,
 } from 'src/app/store/selectors/player.selectors'
 import { CurrentActions, PlayMode, PlayModeLabel, PlayModeType, Song } from '@shared/interfaces/common'
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component'
 
 const MODE_TYPES: PlayMode[] = [
   {
@@ -38,6 +39,7 @@ const MODE_TYPES: PlayMode[] = [
 })
 export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('audio', { static: true }) private audio!: ElementRef
+  @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanelComp?: WyPlayerPanelComponent
   audioDom!: HTMLAudioElement
   songList: Song[] = []
   playList: Song[] = []
@@ -232,6 +234,9 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.audioDom.currentTime = 0
       this.audioDom.play()
       this.isPlaying = true
+      if (this.playerPanelComp) { // 单曲循环下歌词也要从头滚动
+        this.playerPanelComp.seekLyric(0);
+      }
     } else {
       this.onNext(this.currentIndex + 1)
     }
@@ -254,9 +259,9 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const currentTime = this.duration * (per / 100)
     this.audioDom.currentTime = currentTime
-    // if (this.playerPanel) {
-    //   this.playerPanel.seekLyric(currentTime * 1000);
-    // }
+    if (this.playerPanelComp) {
+      this.playerPanelComp.seekLyric(currentTime * 1000);
+    }
   }
 
   // 更新当前歌曲在播放列表的索引

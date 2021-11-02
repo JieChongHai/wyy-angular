@@ -9,5 +9,5 @@
       <i class="icon play" (click)="playSheet(sheet.id)"></i>
     </div>
   </a>
-  <span class="dec">{{ sheet.name }}</span>
+  <span class="dec" [title]="sheet.name">{{ sheet.name }}</span>
 </ng-container>
