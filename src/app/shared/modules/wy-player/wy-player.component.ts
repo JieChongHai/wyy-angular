@@ -5,7 +5,7 @@ import { shuffle } from '@shared/untils'
 import { fromEvent, Subject, Subscription } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { NgxStoreModule } from 'src/app/store'
-import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions/player.actions'
+import { SetCurrentIndex, SetPlayList, SetPlayMode, SetSongList } from 'src/app/store/actions/player.actions'
 import {
   getCurrentAction,
   getCurrentIndex,
@@ -17,6 +17,8 @@ import {
 } from 'src/app/store/selectors/player.selectors'
 import { CurrentActions, PlayMode, PlayModeLabel, PlayModeType, Song } from '@shared/interfaces/common'
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component'
+import { BatchActionsService } from '@store/batch-actions.service'
+import { NzModalService } from 'ng-zorro-antd/modal'
 
 const MODE_TYPES: PlayMode[] = [
   {
@@ -76,7 +78,12 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   selfClick = false
   winClick?: Subscription
 
-  constructor(private store$: Store<NgxStoreModule>, @Inject(DOCUMENT) private doc: Document) {}
+  constructor(
+    private store$: Store<NgxStoreModule>,
+    @Inject(DOCUMENT) private doc: Document,
+    private modal: NzModalService,
+    private batchActionsServ: BatchActionsService
+  ) {}
 
   ngOnInit(): void {
     this.initSubscribe()
@@ -234,8 +241,9 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.audioDom.currentTime = 0
       this.audioDom.play()
       this.isPlaying = true
-      if (this.playerPanelComp) { // 单曲循环下歌词也要从头滚动
-        this.playerPanelComp.seekLyric(0);
+      if (this.playerPanelComp) {
+        // 单曲循环下歌词也要从头滚动
+        this.playerPanelComp.seekLyric(0)
       }
     } else {
       this.onNext(this.currentIndex + 1)
@@ -253,6 +261,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateCurrentIndex(this.playList, song)
   }
 
+  // 拖动歌曲播放进度
   onPercentChange(per: number) {
     if (!this.currentSong) {
       return
@@ -260,8 +269,23 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     const currentTime = this.duration * (per / 100)
     this.audioDom.currentTime = currentTime
     if (this.playerPanelComp) {
-      this.playerPanelComp.seekLyric(currentTime * 1000);
+      this.playerPanelComp.seekLyric(currentTime * 1000)
     }
+  }
+
+  // 删除播放列表里的歌曲
+  onDeleteSong(song: Song): void {
+    this.batchActionsServ.deleteSong(song)
+  }
+
+  // 清空播放列表
+  onClearSong() {
+    this.modal.confirm({
+      nzTitle: '确认清空列表？',
+      nzOnOk: () => {
+        this.batchActionsServ.clearSong()
+      },
+    })
   }
 
   // 更新当前歌曲在播放列表的索引

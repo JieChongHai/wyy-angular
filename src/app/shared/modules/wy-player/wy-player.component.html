@@ -64,6 +64,8 @@
         [show]="showPanel"
         (closePanel)="showPanel = false"
         (changeSong)="onChangeSong($event)"
+        (deleteSong)="onDeleteSong($event)"
+        (clearSong)="onClearSong()"
       ></app-wy-player-panel>
     </div>
   </div>

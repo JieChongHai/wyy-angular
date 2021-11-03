@@ -32,6 +32,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
   @Output() closePanel = new EventEmitter<void>()
   @Output() changeSong = new EventEmitter<Song>()
+  @Output() deleteSong = new EventEmitter<Song>()
+  @Output() clearSong = new EventEmitter<void>()
 
   scrollY = 0 // 歌曲播放列表滚轮滚动高度
   currentIndex?: number // 当前播放歌曲在 songList 里的索引
