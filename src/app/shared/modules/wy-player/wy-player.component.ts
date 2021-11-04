@@ -75,8 +75,11 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   destroy$ = new Subject()
-  selfClick = false
-  winClick?: Subscription
+  // selfClick = false
+  // winClick?: Subscription
+
+  // 是否绑定document click事件
+  bindFlag = false
 
   constructor(
     private store$: Store<NgxStoreModule>,
@@ -191,23 +194,30 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   togglePanel(type: any): void {
     // ;(<any>this[type as keyof this]) = !this[type as keyof this]
     this[type] = !this[type]
-    if (this[type]) {
-      if (!this.winClick) {
-        this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
-          if (this.selfClick) {
-            this.selfClick = false
-          } else {
-            this.showPanel && (this.showPanel = false)
-            this.showVolumnPanel && (this.showVolumnPanel = false)
-            this.winClick?.unsubscribe()
-            this.winClick = undefined
-          }
-        })
-      }
-    } else {
-      this.winClick?.unsubscribe()
-      this.winClick = undefined
-    }
+    this.bindFlag = this.showPanel || this.showVolumnPanel
+    // if (this[type]) {
+    //   if (!this.winClick) {
+    //     this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
+    //       if (this.selfClick) {
+    //         this.selfClick = false
+    //       } else {
+    //         this.showPanel && (this.showPanel = false)
+    //         this.showVolumnPanel && (this.showVolumnPanel = false)
+    //         this.winClick?.unsubscribe()
+    //         this.winClick = undefined
+    //       }
+    //     })
+    //   }
+    // } else {
+    //   this.winClick?.unsubscribe()
+    //   this.winClick = undefined
+    // }
+  }
+
+  onClickOutSide() {
+    this.showVolumnPanel = false
+    this.showPanel = false
+    this.bindFlag = false
   }
 
   onVolumeChange(value: number): void {
