@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { select, Store } from '@ngrx/store'
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel'
 import { map, pluck, switchMap } from 'rxjs/operators'
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private sheetServ: SheetService,
     private songServ: SongService,
     private batchActionsServ: BatchActionsService
@@ -63,5 +64,10 @@ export class HomeComponent implements OnInit {
       .subscribe((list) => {
         this.batchActionsServ.playSheet(list, 0)
       })
+  }
+
+  // 跳转到歌单详情
+  toInfo(id: number) {
+    this.router.navigate(['/sheetInfo', id], { relativeTo: this.route })
   }
 }

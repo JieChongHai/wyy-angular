@@ -16,6 +16,7 @@
         *ngFor="let sheet of sheets?.playlists"
         [sheet]="sheet"
         (play)="onPlaySheet($event)"
+        (click)="toInfo(sheet.id)"
       ></app-single-sheet>
     </div>
 

@@ -1,10 +1,20 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
-  title = 'wyy';
+  title = 'wyy'
+  menus = [
+    {
+      label: '发现',
+      path: '/home',
+    },
+    {
+      label: '歌单',
+      path: '/sheet',
+    },
+  ]
 }

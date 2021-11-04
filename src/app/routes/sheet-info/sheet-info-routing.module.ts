@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { SheetInfoComponent } from './sheet-info.component'
 
-const routes: Routes = []
+const routes: Routes = [
+  {
+    path: '',
+    component: SheetInfoComponent,
+    data: { title: '歌单详情' },
+    // resolve: { sheetInfo: SheetInfoResolverService },
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -12,10 +12,10 @@ const routes: Routes = [
     path: 'sheet',
     loadChildren: () => import('./sheet-list/sheet-list.module').then((m) => m.SheetListModule),
   },
-  // {
-  //   path: 'sheetInfo/:id',
-  //   loadChildren: () => import('./sheet-info/sheet-info.module').then((m) => m.SheetInfoModule),
-  // },
+  {
+    path: 'sheetInfo/:id',
+    loadChildren: () => import('./sheet-info/sheet-info.module').then((m) => m.SheetInfoModule),
+  },
   // {
   //   path: 'songInfo/:id',
   //   loadChildren: () => import('./song-info/song-info.module').then((m) => m.SongInfoModule),

@@ -33,6 +33,7 @@
                 *ngFor="let sheet of sheetList"
                 [sheet]="sheet"
                 (play)="onPlaySheet($event)"
+                (click)="toInfo(sheet.id)"
               ></app-single-sheet>
             </div>
           </div>
