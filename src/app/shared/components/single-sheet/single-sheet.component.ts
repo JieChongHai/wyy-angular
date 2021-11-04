@@ -1,11 +1,5 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
-} from '@angular/core';
-import { SongSheet } from '@shared/interfaces/common';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core'
+import { SongSheet } from '@shared/interfaces/common'
 
 @Component({
   selector: 'app-single-sheet',
@@ -14,12 +8,16 @@ import { SongSheet } from '@shared/interfaces/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleSheetComponent {
-  @Input() sheet!: SongSheet;
-  @Output() play = new EventEmitter<number>();
+  @Input() sheet!: SongSheet
+  @Output() play = new EventEmitter<number>()
+
+  get coverImg(): string {
+    return this.sheet.picUrl || this.sheet.coverImgUrl
+  }
 
   constructor() {}
 
   playSheet(id: number) {
-    this.play.emit(id);
+    this.play.emit(id)
   }
 }

@@ -1,19 +1,7 @@
 <div class="home">
-  <app-wy-carousel
-    [activeIndex]="activeIndex"
-    (changeSlide)="onChangeSlide($event)"
-  >
-    <nz-carousel
-      nzEffect="fade"
-      nzAutoPlay
-      [nzDotRender]="dot"
-      (nzBeforeChange)="onBeforeChange($event)"
-    >
-      <div
-        class="carousel-item"
-        nz-carousel-content
-        *ngFor="let banner of banners"
-      >
+  <app-wy-carousel [activeIndex]="activeIndex" (changeSlide)="onChangeSlide($event)">
+    <nz-carousel nzEffect="fade" nzAutoPlay [nzDotRender]="dot" (nzBeforeChange)="onBeforeChange($event)">
+      <div class="carousel-item" nz-carousel-content *ngFor="let banner of banners">
         <a class="banner-item" [href]="banner.url" target="_blank">
           <img [src]="banner.imageUrl" alt="" srcset="" />
         </a>
@@ -33,12 +21,10 @@
             <div class="navs">
               <h2><i></i><a>热门推荐</a></h2>
               <nav>
-                <a *ngFor="let tag of hotTags">{{ tag.name }}</a>
+                <a *ngFor="let tag of hotTags" routerLink="/sheet" [queryParams]="{ cat: tag.name }">{{ tag.name }}</a>
               </nav>
             </div>
-            <a href=""
-              >更多<i nz-icon nzType="arrow-right" nzTheme="outline"></i
-            ></a>
+            <a routerLink="/sheet">更多<i nz-icon nzType="arrow-right" nzTheme="outline"></i></a>
           </div>
           <div class="down">
             <div class="down-wrap">
@@ -57,11 +43,7 @@
         <div class="settled-singer">
           <div class="tit"><b>入驻歌手</b></div>
           <div class="list">
-            <app-singer-card
-              class="card-item"
-              *ngFor="let singer of singers"
-              [singer]="singer"
-            ></app-singer-card>
+            <app-singer-card class="card-item" *ngFor="let singer of singers" [singer]="singer"></app-singer-card>
           </div>
         </div>
       </div>
