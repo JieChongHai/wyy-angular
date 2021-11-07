@@ -13,6 +13,6 @@ const COMPONENTS: Array<Type<any>> = [WyPlayerComponent]
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, WySliderModule],
   declarations: [...COMPONENTS, FormatTimePipe, ClickoutsideDirective, WyPlayerPanelComponent, WyScrollComponent],
-  exports: [...COMPONENTS],
+  exports: [...COMPONENTS, FormatTimePipe, ClickoutsideDirective],
 })
 export class WyPlayerModule {}

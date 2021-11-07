@@ -137,7 +137,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         // 转换一下歌词对象
         this.lyric = new WyLyric(res)
         this.currentLyric = this.lyric.lines
-        console.log('currentLyric', this.currentLyric)
+        // console.log('currentLyric', this.currentLyric)
         this.startLine = res.tlyric ? 1 : 3;
         this.handleLyric()
         this.wyScroll.last.scrollTo(0, 0)
@@ -154,7 +154,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       return
     }
     this.lyric.handler$.subscribe(({ lineNum }) => {
-      console.log('lineNum', lineNum)
+      // console.log('lineNum', lineNum)
       const scrollComp = this.wyScroll.last // 滚动组件
 
       if (!this.lyricRefs) {

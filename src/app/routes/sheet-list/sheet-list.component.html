@@ -6,7 +6,7 @@
       </div>
 
       <nz-radio-group nzButtonStyle="solid" [(ngModel)]="orderValue" (ngModelChange)="onOrderChange($event)">
-        <label nz-radio-button *ngFor="let o of orderGroup" [nzValue]="o.value">{{ o.label }}</label>
+        <label nz-radio-button *ngFor="let o of orderGroup" [nzValue]="o.value" [nzDisabled]="o.disable || false">{{ o.label }}</label>
       </nz-radio-group>
     </div>
 

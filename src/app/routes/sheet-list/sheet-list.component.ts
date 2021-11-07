@@ -36,6 +36,7 @@ export class SheetListComponent implements OnInit {
     {
       label: '最新',
       value: ECatTag.New,
+      disable: true
     },
   ]
 

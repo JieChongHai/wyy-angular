@@ -58,10 +58,68 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentIndex({ currentIndex: currIdx }))
   }
 
-  // 清空播放列表
+  /** 清空播放列表 */
   clearSong() {
     this.store$.dispatch(SetSongList({ songList: [] }))
     this.store$.dispatch(SetPlayList({ playList: [] }))
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }))
+  }
+
+  /** 往播放列表和歌单列表插入一首歌曲*/
+  insertSong(song: Song, isPlay: boolean) {
+    const playModeType = this.playerState.playMode.type
+    const songList = this.playerState.songList.slice()
+    let playList = this.playerState.playList.slice()
+    let insertIndex = this.playerState.currentIndex
+    const pIndex = playList.findIndex((item) => item.id === song.id)
+
+    if (pIndex > -1) {
+      // 歌曲在播放列表里
+      isPlay && (insertIndex = pIndex)
+    } else {
+      // 歌曲不在播放列表里(即也不在歌单列表里)
+      songList.push(song)
+      isPlay && (insertIndex = songList.length - 1)
+
+      if (playModeType === PlayModeType.Random) {
+        playList = shuffle(songList)
+      } else {
+        playList.push(song)
+      }
+
+      this.store$.dispatch(SetSongList({ songList }))
+      this.store$.dispatch(SetPlayList({ playList }))
+    }
+
+    if (insertIndex !== this.playerState.currentIndex) {
+      this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }))
+    }
+    // if (insertIndex !== this.playerState.currentIndex) {
+    //   this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }))
+    //   this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }))
+    // } else {
+    //   this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
+    // }
+  }
+
+  /** 往播放列表和歌单列表插入多首歌曲*/
+  insertSongs(songs: Song[]) {
+    const playModeType = this.playerState.playMode.type
+    let songList = this.playerState.songList.slice()
+    let playList = this.playerState.playList.slice()
+    const validSongs = songs.filter((song) => playList.findIndex((item) => item.id === song.id) === -1)
+    if (validSongs.length) {
+      songList = songList.concat(validSongs)
+
+      let songPlayList = validSongs.slice()
+      if (playModeType === PlayModeType.Random) {
+        songPlayList = shuffle(songList)
+      }
+      playList = playList.concat(songPlayList)
+      
+      this.store$.dispatch(SetSongList({ songList }))
+      this.store$.dispatch(SetPlayList({ playList }))
+    }
+    // this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
   }
 }

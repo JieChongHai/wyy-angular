@@ -16,10 +16,10 @@ const routes: Routes = [
     path: 'sheetInfo/:id',
     loadChildren: () => import('./sheet-info/sheet-info.module').then((m) => m.SheetInfoModule),
   },
-  // {
-  //   path: 'songInfo/:id',
-  //   loadChildren: () => import('./song-info/song-info.module').then((m) => m.SongInfoModule),
-  // },
+  {
+    path: 'songInfo/:id',
+    loadChildren: () => import('./song-info/song-info.module').then((m) => m.SongInfoModule),
+  },
   // {
   //   path: 'member/:id',
   //   loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),

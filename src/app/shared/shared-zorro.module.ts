@@ -7,6 +7,9 @@ import { NzCarouselModule } from 'ng-zorro-antd/carousel'
 import { NzModalModule } from 'ng-zorro-antd/modal'
 import { NzRadioModule } from 'ng-zorro-antd/radio'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { NzMessageModule } from 'ng-zorro-antd/message'
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -17,5 +20,8 @@ export const SHARED_ZORRO_MODULES = [
   NzCarouselModule,
   NzModalModule,
   NzRadioModule,
-  NzPaginationModule
+  NzPaginationModule,
+  NzTagModule,
+  NzTableModule,
+  NzMessageModule
 ]
