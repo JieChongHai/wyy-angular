@@ -42,7 +42,7 @@ export class SongService {
   getSongDetail(ids: string): Observable<Song> {
     const url = `${this.baseURL}/song/detail`
     const params = new HttpParams().set('ids', ids)
-    return this.http.get<{ songs: Song }>(url, { params }).pipe(map((res) => res.songs[0]))
+    return this.http.get<{ songs: Song }>(url, { params }).pipe(map((res) => res.songs))
   }
 
   // 获取歌词
