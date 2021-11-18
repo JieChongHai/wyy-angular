@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject } from '@angular/core'
 import { select, Store } from '@ngrx/store'
 import { shuffle } from '@shared/untils'
@@ -82,6 +83,8 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   bindFlag = false
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private store$: Store<NgxStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
     private modal: NzModalService,
@@ -139,6 +142,15 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private watchCurrentAction(action: CurrentActions) {}
+
+  // 跳转详情页
+  onToInfo(path: [string, number | undefined]) {
+    if (path[1]) {
+      this.showVolumnPanel = false;
+      this.showPanel = false;
+      this.router.navigate(path, { relativeTo: this.route })
+    }
+  }
 
   //#region 左侧3个按钮（操作的是播放列表）
   onPrev(index: number): void {

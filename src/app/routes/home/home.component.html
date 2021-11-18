@@ -44,7 +44,12 @@
         <div class="settled-singer">
           <div class="tit"><b>入驻歌手</b></div>
           <div class="list">
-            <app-singer-card class="card-item" *ngFor="let singer of singers" [singer]="singer"></app-singer-card>
+            <app-singer-card
+              class="card-item"
+              *ngFor="let singer of singers"
+              [singer]="singer"
+              [routerLink]="['/singer', singer.id]"
+            ></app-singer-card>
           </div>
         </div>
       </div>

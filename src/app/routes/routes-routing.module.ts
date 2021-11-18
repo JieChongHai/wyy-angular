@@ -20,14 +20,14 @@ const routes: Routes = [
     path: 'songInfo/:id',
     loadChildren: () => import('./song-info/song-info.module').then((m) => m.SongInfoModule),
   },
-  // {
-  //   path: 'member/:id',
-  //   loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
-  // },
-  // {
-  //   path: 'singer/:id',
-  //   loadChildren: () => import('./singer/singer.module').then((m) => m.SingerModule),
-  // },
+  {
+    path: 'member/:id',
+    loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
+  },
+  {
+    path: 'singer/:id',
+    loadChildren: () => import('./singer/singer.module').then((m) => m.SingerModule),
+  },
   { path: '**', redirectTo: '/home' },
 ]
 

@@ -34,6 +34,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   @Output() changeSong = new EventEmitter<Song>()
   @Output() deleteSong = new EventEmitter<Song>()
   @Output() clearSong = new EventEmitter<void>()
+  @Output() toInfo = new EventEmitter<[string, number]>()
 
   scrollY = 0 // 歌曲播放列表滚轮滚动高度
   currentIndex?: number // 当前播放歌曲在 songList 里的索引
@@ -100,6 +101,11 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {}
 
+  goToInfo(path: [string, number], e: MouseEvent) {
+    e.stopPropagation()
+    this.toInfo.emit(path)
+  }
+
   /** 从指定时间开始滚动歌词，offset 单位为毫秒 */
   seekLyric(offset: number) {
     if (!this.lyric) {
@@ -138,7 +144,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         this.lyric = new WyLyric(res)
         this.currentLyric = this.lyric.lines
         // console.log('currentLyric', this.currentLyric)
-        this.startLine = res.tlyric ? 1 : 3;
+        this.startLine = res.tlyric ? 1 : 3
         this.handleLyric()
         this.wyScroll.last.scrollTo(0, 0)
         if (this.playing) {

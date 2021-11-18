@@ -20,7 +20,7 @@
               <span>歌手：</span>
               <ul class="clearfix">
                 <li *ngFor="let singer of song.ar; last as isLast">
-                  <a [href]="'//music.163.com/artist?id=' + singer.id">
+                  <a [routerLink]="['/singer', singer.id]">
                     {{ singer.name }}
                   </a>
                   <i [hidden]="isLast">/</i>
@@ -56,7 +56,7 @@
                 <p>{{ item.txtCn }}</p>
               </div>
             </div>
-
+            <!-- TODO: 这个展开在纯音乐的时候不要展示 -->
             <div class="toggle-expand" (click)="toggleLyric()" *ngIf="true">
               <span>{{ controlLyric.label }}</span>
               <i nz-icon [nzType]="controlLyric.iconCls" nzTheme="outline"></i>

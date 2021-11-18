@@ -28,11 +28,11 @@
           <div class="col icons">
             <i class="ico like" title="收藏"></i>
             <i class="ico share" title="分享"></i>
-            <i class="ico trush" title="删除" (click)="deleteSong.emit(item)"></i>
+            <i class="ico trush" title="删除" (click)="$event.stopPropagation(); deleteSong.emit(item)"></i>
           </div>
           <div class="singers clearfix ellipsis">
             <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">
-              <a href="" class="col ellipsis">{{ singer.name }}</a>
+              <a class="col ellipsis" (click)="goToInfo(['/singer', singer.id], $event)">{{ singer.name }}</a>
               <span [hidden]="isLast">/</span>
             </div>
           </div>
