@@ -1,0 +1,46 @@
+<div class="search-panel">
+  <div class="list-wrap">
+    <div class="list-item clearfix" [hidden]="!searchData?.songs">
+      <div class="hd">
+        <i class="ico ico-song"></i>
+        <span>单曲</span>
+      </div>
+      <ul>
+        <li
+          class="ellipsis"
+          *ngFor="let item of searchData?.songs"
+          (click)="onToInfo(['/songInfo', item.id])"
+          [innerHTML]="item.name"
+        ></li>
+      </ul>
+    </div>
+    <div class="list-item clearfix" [hidden]="!searchData?.artists">
+      <div class="hd">
+        <i class="ico ico-singer"></i>
+        <span>歌手</span>
+      </div>
+      <ul>
+        <li
+          class="ellipsis"
+          *ngFor="let item of searchData?.artists"
+          (click)="onToInfo(['/singer', item.id])"
+          [innerHTML]="item.name"
+        ></li>
+      </ul>
+    </div>
+    <div class="list-item clearfix" [hidden]="!searchData?.playlists">
+      <div class="hd">
+        <i class="ico ico-sheet"></i>
+        <span>歌单</span>
+      </div>
+      <ul>
+        <li
+          class="ellipsis"
+          *ngFor="let item of searchData?.playlists"
+          (click)="onToInfo(['/sheetInfo', item.id])"
+          [innerHTML]="item.name"
+        ></li>
+      </ul>
+    </div>
+  </div>
+</div>

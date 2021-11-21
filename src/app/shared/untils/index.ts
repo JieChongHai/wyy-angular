@@ -32,3 +32,12 @@ export function shuffle<T>(arr: T[]): T[] {
   }
   return result
 }
+
+/**
+ * 判断是否为空对象
+ * @param obj 
+ * @returns boolean
+ */
+export function isEmptyObject(obj: Object): boolean {
+  return JSON.stringify(obj) === '{}';
+}

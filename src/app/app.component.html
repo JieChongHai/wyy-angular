@@ -15,14 +15,7 @@
           </ul>
         </div>
         <div class="right">
-          <div class="search">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="input search text" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </div>
+          <app-wy-search (keywordChange)="onSearch($event)" [searchData]="searchData"></app-wy-search>
           <div class="member">
             <div class="no-login">
               <ul nz-menu nzTheme="dark" nzMode="horizontal">

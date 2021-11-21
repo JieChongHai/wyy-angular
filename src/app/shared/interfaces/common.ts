@@ -89,7 +89,8 @@ export interface SheetList {
 export interface SearchResult {
   artists?: Singer[]
   playlists?: SongSheet[]
-  songs?: Song[]
+  songs?: Song[],
+  order?: string[]
 }
 
 export enum PlayModeType {
