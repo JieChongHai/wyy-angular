@@ -71,7 +71,6 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
   // 添加一首歌曲
   onAddSong(song: Song, isPlay = false) {
-    console.log(this.currentSong?.id, song.id)
     if (!this.currentSong || this.currentSong.id !== song.id) {
       // 获取带有播放地址的歌曲信息
       this.songServ.getSongList(song).subscribe((list) => {

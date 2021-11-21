@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core'
 import { select, Store } from '@ngrx/store'
-import { PlayModeType, Song } from '@shared/interfaces/common'
+import { CurrentActions, PlayModeType, Song } from '@shared/interfaces/common'
 import { shuffle } from '@shared/untils'
 import { NgxStoreModule } from '.'
-import { SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.actions'
+import { SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.actions'
 import { PlayState } from './reducers/player.reducer'
 import { getPlayer } from './selectors/player.selectors'
 
@@ -33,6 +33,7 @@ export class BatchActionsService {
     }
     this.store$.dispatch(SetPlayList({ playList: songList }))
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }))
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }))
   }
 
   /**
@@ -56,6 +57,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetSongList({ songList }))
     this.store$.dispatch(SetPlayList({ playList }))
     this.store$.dispatch(SetCurrentIndex({ currentIndex: currIdx }))
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }))
   }
 
   /** 清空播放列表 */
@@ -63,6 +65,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetSongList({ songList: [] }))
     this.store$.dispatch(SetPlayList({ playList: [] }))
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }))
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }))
   }
 
   /** 往播放列表和歌单列表插入一首歌曲*/
@@ -93,13 +96,10 @@ export class BatchActionsService {
 
     if (insertIndex !== this.playerState.currentIndex) {
       this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }))
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }))
+    } else {
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
     }
-    // if (insertIndex !== this.playerState.currentIndex) {
-    //   this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }))
-    //   this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }))
-    // } else {
-    //   this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
-    // }
   }
 
   /** 往播放列表和歌单列表插入多首歌曲*/
@@ -116,10 +116,10 @@ export class BatchActionsService {
         songPlayList = shuffle(songList)
       }
       playList = playList.concat(songPlayList)
-      
+
       this.store$.dispatch(SetSongList({ songList }))
       this.store$.dispatch(SetPlayList({ playList }))
     }
-    // this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
   }
 }

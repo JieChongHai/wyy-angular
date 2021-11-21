@@ -3,10 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject } from '@angular/core'
 import { select, Store } from '@ngrx/store'
 import { shuffle } from '@shared/untils'
-import { fromEvent, Subject, Subscription } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import { fromEvent, Subject, Subscription, timer } from 'rxjs'
+import { debounceTime, takeUntil } from 'rxjs/operators'
 import { NgxStoreModule } from 'src/app/store'
-import { SetCurrentIndex, SetPlayList, SetPlayMode, SetSongList } from 'src/app/store/actions/player.actions'
+import {
+  SetCurrentAction,
+  SetCurrentIndex,
+  SetPlayList,
+  SetPlayMode,
+  SetSongList,
+} from 'src/app/store/actions/player.actions'
 import {
   getCurrentAction,
   getCurrentIndex,
@@ -20,7 +26,16 @@ import { CurrentActions, PlayMode, PlayModeLabel, PlayModeType, Song } from '@sh
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { animate, state, style, transition, trigger, AnimationEvent } from '@angular/animations'
 
+enum PlayerType {
+  Show = 'show',
+  Hide = 'hide',
+}
+enum TipTitles {
+  Add = '已添加到列表',
+  Play = '已开始播放',
+}
 const MODE_TYPES: PlayMode[] = [
   {
     type: PlayModeType.Loop,
@@ -35,12 +50,24 @@ const MODE_TYPES: PlayMode[] = [
     label: PlayModeLabel.SingleLoop,
   },
 ]
+
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less'],
+  animations: [
+    trigger('showHide', [
+      state('show', style({ bottom: 0 })),
+      state('hide', style({ bottom: -71 })),
+      transition('show=>hide', [animate('0.3s')]),
+      transition('hide=>show', [animate('0.1s')]),
+    ]),
+  ],
 })
 export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
+  //#region 页面引用
+  public PlayerType = PlayerType
+  //#endregion
   @ViewChild('audio', { static: true }) private audio!: ElementRef
   @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanelComp?: WyPlayerPanelComponent
   audioDom!: HTMLAudioElement
@@ -82,6 +109,18 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   // 是否绑定document click事件
   bindFlag = false
 
+  //#region 底部播放条动画
+  showPlayer = PlayerType.Hide
+  isLocked = false // 是否锁住底部播放条
+  animating = false // 是否正在动画
+
+  controlTooltip = {
+    title: '',
+    show: false,
+  }
+  hideTooltip$ = new Subject() // 防止反复弹框
+  //#endregion
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -115,6 +154,18 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     appStore$
       .pipe(select(getCurrentAction), takeUntil(this.destroy$))
       .subscribe((action) => this.watchCurrentAction(action))
+
+    this.hideTooltip$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      timer(1500)
+        .pipe(takeUntil(this.hideTooltip$))
+        .subscribe(() => {
+          this.controlTooltip = {
+            title: '',
+            show: false,
+          }
+          timer(300).subscribe(() =>　this.togglePlayer(PlayerType.Hide))
+        })
+    })
   }
 
   private watchPlayMode(mode: PlayMode) {
@@ -133,6 +184,11 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private watchCurrentSong(song: Song) {
+    // this.currentSong = song // 这一行必须执行，无论song是否有值（要包括删除歌曲的情况）
+    // if (this.currentSong) {
+    //   this.bufferPercent = 0
+    //   this.duration = song.dt / 1000
+    // }
     if (!song) {
       return
     }
@@ -141,13 +197,56 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.duration = song.dt / 1000
   }
 
-  private watchCurrentAction(action: CurrentActions) {}
+  private watchCurrentAction(action: CurrentActions) {
+    const title = TipTitles[CurrentActions[action]]
+    if (title) {
+      this.controlTooltip.title = title
+      if (this.showPlayer === PlayerType.Hide) {
+        // 主动把播放器弹起，等动画结束后弹出提示框
+        this.togglePlayer(PlayerType.Show)
+      } else {
+        this.showToolTip()
+      }
+    }
+    // 每次变化后重置一下状态，就不会影响到下一次触发
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }))
+  }
+
+  // 切换底部播放条动画
+  togglePlayer(type: PlayerType) {
+    if (!this.isLocked && !this.animating) {
+      this.showPlayer = type
+    }
+  }
+
+  onAnimationEvent(event: AnimationEvent) {
+    switch (event.phaseName) {
+      case 'start':
+        this.animating = true
+        break
+      case 'done':
+        this.animating = false
+        if (event.toState === PlayerType.Show && this.controlTooltip.title) {
+          // 只有在从 hide => show 的情况下才展示 tooltip
+          this.showToolTip()
+        }
+        break
+
+      default:
+        break
+    }
+  }
+
+  showToolTip(autoHide = false) {
+    this.controlTooltip.show = true
+    this.hideTooltip$.next(autoHide)
+  }
 
   // 跳转详情页
   onToInfo(path: [string, number | undefined]) {
     if (path[1]) {
-      this.showVolumnPanel = false;
-      this.showPanel = false;
+      this.showVolumnPanel = false
+      this.showPanel = false
       this.router.navigate(path, { relativeTo: this.route })
     }
   }

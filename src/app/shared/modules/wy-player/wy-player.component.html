@@ -1,6 +1,16 @@
-<div class="m-player" appClickoutside [bindFlag]="bindFlag" (clickOutSide)="onClickOutSide()">
-  <div class="lock">
-    <div class="left"><i></i></div>
+<div
+  class="m-player"
+  appClickoutside
+  [bindFlag]="bindFlag"
+  (clickOutSide)="onClickOutSide()"
+  [@showHide]="showPlayer"
+  (@showHide.start)="onAnimationEvent($event)"
+  (@showHide.done)="onAnimationEvent($event)"
+  (mouseenter)="togglePlayer(PlayerType.Show)"
+  (mouseleave)="togglePlayer(PlayerType.Hide)"
+>
+  <div class="lock" (click)="isLocked = !isLocked">
+    <div class="left"><i [class.locked]="isLocked"></i></div>
   </div>
   <div class="hand"></div>
   <div class="container">
@@ -48,7 +58,18 @@
       <div class="ctrl">
         <i class="volume" tite="音量" (click)="toggleVolumnPanel()"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="onChangeMode()"></i>
-        <p class="open" (click)="toggleListPanel()"><span></span></p>
+        <p
+          nz-tooltip
+          [nzTooltipTitle]="controlTooltip.title"
+          [nzTooltipTrigger]="null"
+          [nzTooltipVisible]="controlTooltip.show"
+          nzTooltipPlacement="top"
+          nzTooltipOverlayClassName="tip-bg"
+          class="open"
+          (click)="toggleListPanel()"
+        >
+          <span></span>
+        </p>
 
         <div class="control-vol" [hidden]="!showVolumnPanel">
           <app-wy-slider
