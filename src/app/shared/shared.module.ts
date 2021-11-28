@@ -3,6 +3,7 @@ import { NgModule, Type } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { SingleSheetComponent } from './components/single-sheet/single-sheet.component'
+import { LazyImgDirective } from './directives/lazy-img.directive'
 import { WyPlayerModule } from './modules/wy-player/wy-player.module'
 import { WySearchModule } from './modules/wy-search/wy-search.module'
 import { PlayCountPipe } from './pipes/play-count.pipe'
@@ -17,7 +18,7 @@ const THIRD_MODULES: Array<Type<any>> = [WyPlayerModule, WySearchModule]
 
 // #region your componets & directives & pipes
 const COMPONENTS: Array<Type<any>> = [SingleSheetComponent]
-const DIRECTIVES: Array<Type<any>> = []
+const DIRECTIVES: Array<Type<any>> = [LazyImgDirective]
 const PIPES: Array<Type<any>> = [PlayCountPipe]
 // #endregion
 
