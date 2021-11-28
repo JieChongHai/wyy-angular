@@ -101,8 +101,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {}
 
-  goToInfo(path: [string, number], e: MouseEvent) {
-    e.stopPropagation()
+  goToInfo(path: [string, number]) {
     this.toInfo.emit(path)
   }
 
