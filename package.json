@@ -22,6 +22,7 @@
     "@better-scroll/core": "^2.4.2",
     "@better-scroll/mouse-wheel": "^2.4.2",
     "@better-scroll/scroll-bar": "^2.4.2",
+    "@ngneat/until-destroy": "^8.1.4",
     "@ngrx/store": "^12.5.0",
     "@ngrx/store-devtools": "^12.5.0",
     "minireset.css": "0.0.7",

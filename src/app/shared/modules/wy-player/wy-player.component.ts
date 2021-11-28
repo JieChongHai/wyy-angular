@@ -27,6 +27,7 @@ import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.compon
 import { BatchActionsService } from '@store/batch-actions.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { animate, state, style, transition, trigger, AnimationEvent } from '@angular/animations'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
 enum PlayerType {
   Show = 'show',
@@ -50,7 +51,7 @@ const MODE_TYPES: PlayMode[] = [
     label: PlayModeLabel.SingleLoop,
   },
 ]
-
+@UntilDestroy()
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
@@ -64,7 +65,7 @@ const MODE_TYPES: PlayMode[] = [
     ]),
   ],
 })
-export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class WyPlayerComponent implements OnInit, AfterViewInit {
   //#region 页面引用
   public PlayerType = PlayerType
   //#endregion
@@ -102,7 +103,6 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.currentSongURL ? 'metadata' : 'none'
   }
 
-  destroy$ = new Subject()
   // selfClick = false
   // winClick?: Subscription
 
@@ -139,23 +139,18 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.audioDom.volume = this.volume
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-
   initSubscribe(): void {
     const appStore$ = this.store$.pipe(select(getPlayer))
-    appStore$.pipe(select(getSongList), takeUntil(this.destroy$)).subscribe((list) => (this.songList = list))
-    appStore$.pipe(select(getPlayList), takeUntil(this.destroy$)).subscribe((list) => (this.playList = list))
-    appStore$.pipe(select(getPlayMode), takeUntil(this.destroy$)).subscribe((mode) => this.watchPlayMode(mode))
-    appStore$.pipe(select(getCurrentIndex), takeUntil(this.destroy$)).subscribe((index) => (this.currentIndex = index))
-    appStore$.pipe(select(getCurrentSong), takeUntil(this.destroy$)).subscribe((song) => this.watchCurrentSong(song))
+    appStore$.pipe(select(getSongList), untilDestroyed(this)).subscribe((list) => (this.songList = list))
+    appStore$.pipe(select(getPlayList), untilDestroyed(this)).subscribe((list) => (this.playList = list))
+    appStore$.pipe(select(getPlayMode), untilDestroyed(this)).subscribe((mode) => this.watchPlayMode(mode))
+    appStore$.pipe(select(getCurrentIndex), untilDestroyed(this)).subscribe((index) => (this.currentIndex = index))
+    appStore$.pipe(select(getCurrentSong), untilDestroyed(this)).subscribe((song) => this.watchCurrentSong(song))
     appStore$
-      .pipe(select(getCurrentAction), takeUntil(this.destroy$))
+      .pipe(select(getCurrentAction), untilDestroyed(this))
       .subscribe((action) => this.watchCurrentAction(action))
 
-    this.hideTooltip$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.hideTooltip$.pipe(untilDestroyed(this)).subscribe(() => {
       timer(1500)
         .pipe(takeUntil(this.hideTooltip$))
         .subscribe(() => {
@@ -163,7 +158,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
             title: '',
             show: false,
           }
-          timer(300).subscribe(() =>　this.togglePlayer(PlayerType.Hide))
+          timer(300).subscribe(() => this.togglePlayer(PlayerType.Hide))
         })
     })
   }

@@ -1,20 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { select, Store } from '@ngrx/store'
 import { NgxStoreModule } from '@store/index'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { SongService } from 'src/app/services/song.service'
-import { map, takeUntil } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 import { Song, SongSheet } from '@shared/interfaces/common'
-import { Subject } from 'rxjs'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
+@UntilDestroy()
 @Component({
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less'],
 })
-export class SheetInfoComponent implements OnInit, OnDestroy {
+export class SheetInfoComponent implements OnInit {
   sheetInfo!: SongSheet
   currentSong?: Song
   currentIndex = -1
@@ -30,8 +31,6 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     iconCls: 'down',
   }
 
-  private destroy$ = new Subject<void>()
-
   constructor(
     private route: ActivatedRoute,
     private store$: Store<NgxStoreModule>,
@@ -40,16 +39,11 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     private batchActionServ: BatchActionsService
   ) {}
 
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-
   ngOnInit(): void {
     this.route.data
       .pipe(
         map((res) => res.sheetInfo),
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       )
       .subscribe((res) => {
         this.sheetInfo = res
@@ -77,14 +71,14 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   }
 
   private handleCurrentSong() {
-    this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$)).subscribe((song) => {
+    this.store$.pipe(select(getPlayer), select(getCurrentSong), untilDestroyed(this)).subscribe((song) => {
       this.currentSong = song
       this.currentIndex = song ? this.sheetInfo.tracks.findIndex((item) => item.id === song.id) : -1
     })
   }
 
   //#region 按钮操作
-  
+
   // 展开/收起评语
   toggleDesc() {
     const isExpand = !this.controlDesc.isExpand

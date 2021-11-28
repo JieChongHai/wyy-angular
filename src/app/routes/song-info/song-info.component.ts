@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { select, Store } from '@ngrx/store'
 import { Song, SongSheet } from '@shared/interfaces/common'
@@ -10,13 +10,15 @@ import { SongService } from 'src/app/services/song.service'
 import { BaseLyricLine, WyLyric } from 'src/app/shared/modules/wy-player/wy-player-panel/wy-lyric'
 import { map, takeUntil } from 'rxjs/operators'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
+@UntilDestroy()
 @Component({
   selector: 'app-song-info',
   templateUrl: './song-info.component.html',
   styleUrls: ['./song-info.component.less'],
 })
-export class SongInfoComponent implements OnInit, OnDestroy {
+export class SongInfoComponent implements OnInit {
   song!: Song
   currentSong?: Song
   lyric?: BaseLyricLine[]
@@ -37,16 +39,11 @@ export class SongInfoComponent implements OnInit, OnDestroy {
     private batchActionServ: BatchActionsService
   ) {}
 
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-
   ngOnInit(): void {
     this.route.data
       .pipe(
         map((res) => res.songInfo),
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       )
       .subscribe(([song, lyric]) => {
         this.song = song
@@ -57,7 +54,7 @@ export class SongInfoComponent implements OnInit, OnDestroy {
   }
 
   private handleCurrentSong() {
-    this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$)).subscribe((song) => {
+    this.store$.pipe(select(getPlayer), select(getCurrentSong), untilDestroyed(this)).subscribe((song) => {
       this.currentSong = song
     })
   }

@@ -1,26 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { select, Store } from '@ngrx/store'
 import { NgxStoreModule } from '@store/index'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { NzMessageService } from 'ng-zorro-antd/message'
-import { Subject } from 'rxjs'
 import { SongService } from 'src/app/services/song.service'
-import { map, takeUntil } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 import { SingerDetail, Song, SongSheet } from '@shared/interfaces/common'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
+@UntilDestroy()
 @Component({
   selector: 'app-singer-detail',
   templateUrl: './singer-detail.component.html',
   styleUrls: ['./singer-detail.component.less'],
 })
-export class SingerDetailComponent implements OnInit, OnDestroy {
+export class SingerDetailComponent implements OnInit {
   singerDetail!: SingerDetail
   currentSong?: Song
   currentIndex = -1
-
-  private destroy$ = new Subject<void>()
 
   constructor(
     private route: ActivatedRoute,
@@ -30,16 +29,11 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private batchActionServ: BatchActionsService
   ) {}
 
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-
   ngOnInit(): void {
     this.route.data
       .pipe(
         map((res) => res.singerDetail),
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       )
       .subscribe((singerDetail) => {
         this.singerDetail = singerDetail
@@ -48,7 +42,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
   }
 
   private handleCurrentSong() {
-    this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$)).subscribe((song) => {
+    this.store$.pipe(select(getPlayer), select(getCurrentSong), untilDestroyed(this)).subscribe((song) => {
       this.currentSong = song
       this.currentIndex = song ? this.singerDetail.hotSongs.findIndex((item) => item.id === song.id) : -1
     })
