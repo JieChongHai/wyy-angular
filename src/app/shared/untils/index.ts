@@ -38,6 +38,6 @@ export function shuffle<T>(arr: T[]): T[] {
  * @param obj 
  * @returns boolean
  */
-export function isEmptyObject(obj: Object): boolean {
+export function isEmptyObject(obj: any): boolean {
   return JSON.stringify(obj) === '{}';
 }

@@ -1,15 +1,6 @@
 import { DOCUMENT } from '@angular/common'
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  Output,
-  Renderer2,
-  SimpleChanges,
-} from '@angular/core'
+import { Directive, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, Renderer2 } from '@angular/core'
+import { NgChanges } from '@shared/interfaces/utils'
 
 @Directive({
   selector: '[appClickoutside]',
@@ -25,7 +16,7 @@ export class ClickoutsideDirective implements OnChanges {
     this.containerDom = this.el.nativeElement as HTMLElement
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<ClickoutsideDirective>): void {
     const { bindFlag } = changes
     if (bindFlag && !bindFlag.firstChange) {
       if (bindFlag.currentValue) {

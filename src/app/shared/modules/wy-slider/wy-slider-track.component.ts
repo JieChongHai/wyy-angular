@@ -1,11 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnChanges,
-  Input,
-  SimpleChanges,
-} from '@angular/core';
-import { WySliderStyle } from './wy-slider-helper';
+import { Component, ChangeDetectionStrategy, OnChanges, Input } from '@angular/core'
+import { NgChanges } from '@shared/interfaces/utils'
+import { WySliderStyle } from './wy-slider-helper'
 
 @Component({
   selector: 'app-wy-slider-track',
@@ -15,32 +10,32 @@ import { WySliderStyle } from './wy-slider-helper';
 })
 export class WySliderTrackComponent implements OnChanges {
   /** 是否垂直放置 */
-  @Input() vertical = false;
+  @Input() vertical = false
   /** 播放进度 */
-  @Input() length: number = 0;
+  @Input() length: number = 0
   /** 缓冲进度 */
-  @Input() buffer: boolean = false;
+  @Input() buffer: boolean = false
   // 进度条样式
-  style: WySliderStyle = {};
+  style: WySliderStyle = {}
   constructor() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<WySliderTrackComponent>): void {
     if (changes.length) {
-      let style = {};
+      let style = {}
       if (this.vertical) {
         style = {
           height: `${this.length}%`,
-        };
+        }
         // this.style.left = null;
         // this.style.width = null;
       } else {
         style = {
           width: `${this.length}%`,
-        };
+        }
         // this.style.bottom = null;
         // this.style.height = null;
       }
-      this.style = style;
+      this.style = style
     }
   }
 }

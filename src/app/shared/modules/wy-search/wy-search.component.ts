@@ -12,10 +12,10 @@ import {
   ViewChild,
   AfterViewInit,
   OnChanges,
-  SimpleChanges,
   ViewContainerRef,
 } from '@angular/core'
 import { SearchResult } from '@shared/interfaces/common'
+import { NgChanges } from '@shared/interfaces/utils'
 import { isEmptyObject } from '@shared/untils'
 import { fromEvent } from 'rxjs'
 import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/operators'
@@ -47,7 +47,7 @@ export class WySearchComponent implements OnInit, OnChanges, AfterViewInit {
     private dataServ: WySearchDataService
   ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<WySearchComponent>): void {
     const { searchData } = changes
     if (searchData && !searchData.firstChange) {
       !isEmptyObject(searchData.currentValue) ? this.showPanel() : this.hidePanel()
@@ -70,7 +70,7 @@ export class WySearchComponent implements OnInit, OnChanges, AfterViewInit {
 
   onFocus(): void {
     if (this.searchData && !isEmptyObject(this.searchData)) {
-      this.showPanel();
+      this.showPanel()
     }
   }
 

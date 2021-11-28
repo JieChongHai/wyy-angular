@@ -17,6 +17,7 @@ import BScroll from '@better-scroll/core'
 import ScrollBar from '@better-scroll/scroll-bar'
 import MouseWheel from '@better-scroll/mouse-wheel'
 import { timer } from 'rxjs'
+import { NgChanges } from '@shared/interfaces/utils'
 
 BScroll.use(MouseWheel)
 BScroll.use(ScrollBar)
@@ -50,7 +51,7 @@ export class WyScrollComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   constructor(public el: ElementRef) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<WyScrollComponent>): void {
     const { data } = changes
     if (data) {
       this.refreshScroll()

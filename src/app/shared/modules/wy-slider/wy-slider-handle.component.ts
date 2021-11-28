@@ -1,11 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
-import { WySliderStyle } from './wy-slider-helper';
+import { Component, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core'
+import { NgChanges } from '@shared/interfaces/utils'
+import { WySliderStyle } from './wy-slider-helper'
 
 @Component({
   selector: 'app-wy-slider-handle',
@@ -15,18 +10,18 @@ import { WySliderStyle } from './wy-slider-helper';
 })
 export class WySliderHandleComponent implements OnChanges {
   /** 是否垂直放置 */
-  @Input() vertical = false;
+  @Input() vertical = false
   /** 偏移量 */
-  @Input() offset: number = 0;
+  @Input() offset: number = 0
   // 滑块样式
-  style: WySliderStyle = {};
+  style: WySliderStyle = {}
 
   constructor() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<WySliderHandleComponent>): void {
     if (changes.offset) {
-      const direction = this.vertical ? 'bottom' : 'left';
-      this.style = { [direction]: `${this.offset}%` };
+      const direction = this.vertical ? 'bottom' : 'left'
+      this.style = { [direction]: `${this.offset}%` }
     }
   }
 }

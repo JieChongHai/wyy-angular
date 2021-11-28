@@ -11,6 +11,7 @@ import {
   SimpleChanges,
 } from '@angular/core'
 import { Song } from '@shared/interfaces/common'
+import { NgChanges } from '@shared/interfaces/utils'
 import { timer } from 'rxjs'
 import { SongService } from 'src/app/services/song.service'
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component'
@@ -47,7 +48,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   private startLine = 2
 
   constructor(private songServe: SongService) {}
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: NgChanges<WyPlayerPanelComponent>): void {
     const { playing, songList, currentSong, show } = changes
 
     if (playing) {
