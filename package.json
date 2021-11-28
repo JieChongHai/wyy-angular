@@ -2,9 +2,13 @@
   "name": "wyy",
   "version": "0.0.0",
   "scripts": {
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
+    "ng-build-cache": "cross-env NG_PERSISTENT_BUILD_CACHE=1 ng",
     "ng": "ng",
-    "start": "cross-env NG_PERSISTENT_BUILD_CACHE=1 ng serve",
-    "build": "cross-env NG_PERSISTENT_BUILD_CACHE=1 ng build",
+    "hmr": "ng s -o --hmr",
+    "start": "npm run ng-build-cache serve -o",
+    "build": "npm run ng-build-cache build",
+    "analyze": "npm run ng-build-cache build --stats-json && webpack-bundle-analyzer dist/wyy/stats.json",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -46,6 +50,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.3.5"
+    "typescript": "~4.3.5",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }
