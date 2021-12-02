@@ -2,15 +2,15 @@
   "name": "wyy",
   "version": "0.0.0",
   "scripts": {
-    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
-    "ng-build-cache": "cross-env NG_PERSISTENT_BUILD_CACHE=1 ng",
     "ng": "ng",
     "hmr": "ng s -o --hmr",
-    "start": "npm run ng-build-cache serve -o",
+    "start": "npm run ng-build-cache serve",
     "build": "npm run ng-build-cache build",
     "analyze": "npm run ng-build-cache build --stats-json && webpack-bundle-analyzer dist/wyy/stats.json",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
+    "ng-build-cache": "cross-env NG_PERSISTENT_BUILD_CACHE=1 ng"
   },
   "private": true,
   "dependencies": {

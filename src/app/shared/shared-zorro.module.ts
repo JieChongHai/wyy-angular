@@ -10,6 +10,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzMessageModule } from 'ng-zorro-antd/message'
+import { NzBackTopModule } from 'ng-zorro-antd/back-top'
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -23,5 +24,6 @@ export const SHARED_ZORRO_MODULES = [
   NzPaginationModule,
   NzTagModule,
   NzTableModule,
-  NzMessageModule
+  NzMessageModule,
+  NzBackTopModule
 ]

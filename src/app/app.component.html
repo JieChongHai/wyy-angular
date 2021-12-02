@@ -5,11 +5,7 @@
         <div class="left">
           <h1>Music</h1>
           <ul nz-menu nzTheme="dark" nzMode="horizontal">
-            <li
-              nz-menu-item
-              *ngFor="let menu of menus"
-              [routerLink]="menu.path"
-            >
+            <li nz-menu-item *ngFor="let menu of menus" [routerLink]="menu.path">
               {{ menu.label }}
             </li>
           </ul>
@@ -47,5 +43,31 @@
     <nz-footer class="footer">Ant Design ©2020 Implement By Angular</nz-footer>
   </nz-layout>
 </div>
+
 <!-- 底部播放器 -->
 <app-wy-player></app-wy-player>
+
+
+<!-- 页面弹框 -->
+<app-wy-layer-modal>
+  <!-- <app-wy-layer-login
+    name="login"
+    [visible]="visible"
+    [wyRememberLogin]="wyRememberLogin"
+    (onLogin)="onLogin($event)"
+    (onChangeModalType)="onChangeModalType($event)"
+  ></app-wy-layer-login> -->
+  <app-wy-layer-default></app-wy-layer-default>
+  <!-- <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default> -->
+</app-wy-layer-modal>
+
+
+<!-- 回到顶部按钮 -->
+<nz-back-top [nzTemplate]="tpl"></nz-back-top>
+<ng-template #tpl>
+  <div class="ant-back-top-inner">
+    <button nz-button nzType="primary" nzSize="large">
+      <i nz-icon nzType="to-top" nzTheme="outline"></i>
+    </button>
+  </div>
+</ng-template>

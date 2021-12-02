@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { SingleSheetComponent } from './components/single-sheet/single-sheet.component'
 import { LazyImgDirective } from './directives/lazy-img.directive'
+import { WyLayerModule } from './modules/wy-layer/wy-layer.module'
 import { WyPlayerModule } from './modules/wy-player/wy-player.module'
 import { WySearchModule } from './modules/wy-search/wy-search.module'
 import { PlayCountPipe } from './pipes/play-count.pipe'
@@ -13,7 +14,7 @@ import { SHARED_ZORRO_MODULES } from './shared-zorro.module'
 // #region third libs
 // import { NgxTinymceModule } from 'ngx-tinymce';
 // import { UEditorModule } from 'ngx-ueditor';
-const THIRD_MODULES: Array<Type<any>> = [WyPlayerModule, WySearchModule]
+const THIRD_MODULES: Array<Type<any>> = [WyPlayerModule, WySearchModule, WyLayerModule]
 // #endregion
 
 // #region your componets & directives & pipes

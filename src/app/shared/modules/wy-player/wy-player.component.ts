@@ -369,6 +369,7 @@ export class WyPlayerComponent implements OnInit, AfterViewInit {
   onError() {
     this.isPlaying = false
     this.bufferPercent = 0
+    this.duration = 0
   }
   //#endregion
 

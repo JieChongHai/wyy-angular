@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core'
 import { StoreModule } from '@ngrx/store'
 import { extModules } from './store-devtools';
 import { playerReducer } from './reducers/player.reducer';
+import { memberReducer } from './reducers/member.reducer';
 
 @NgModule({
   declarations: [],
   imports: [
-    StoreModule.forRoot({ player: playerReducer }, {
+    StoreModule.forRoot({ player: playerReducer, member: memberReducer }, {
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
