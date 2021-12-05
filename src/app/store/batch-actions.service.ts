@@ -2,9 +2,13 @@ import { Injectable } from '@angular/core'
 import { select, Store } from '@ngrx/store'
 import { CurrentActions, PlayModeType, Song } from '@shared/interfaces/common'
 import { shuffle } from '@shared/untils'
+import { timer } from 'rxjs'
 import { NgxStoreModule } from '.'
+import { SetLikeId, SetModalType, SetModalVisible } from './actions/member.actions'
 import { SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.actions'
+import { MemberState, ModalTypes } from './reducers/member.reducer'
 import { PlayState } from './reducers/player.reducer'
+import { getMember } from './selectors/member.selectors'
 import { getPlayer } from './selectors/player.selectors'
 
 @Injectable({
@@ -12,10 +16,11 @@ import { getPlayer } from './selectors/player.selectors'
 })
 export class BatchActionsService {
   private playerState!: PlayState
+  private memberState!: MemberState
 
   constructor(private store$: Store<NgxStoreModule>) {
-    const appStore$ = this.store$.pipe(select(getPlayer))
-    appStore$.subscribe((res) => (this.playerState = res))
+    this.store$.pipe(select(getPlayer)).subscribe((res) => (this.playerState = res))
+    this.store$.pipe(select(getMember)).subscribe((res) => (this.memberState = res))
   }
 
   /**
@@ -122,4 +127,23 @@ export class BatchActionsService {
     }
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }))
   }
+
+  //#region Member
+  // 会员弹窗显示隐藏/类型
+  controlModal(modalVisible = true, modalType?: ModalTypes) {
+    if (modalType) {
+      this.store$.dispatch(SetModalType({ modalType }))
+    }
+    this.store$.dispatch(SetModalVisible({ modalVisible }))
+    if (!modalVisible) {
+      timer(500).subscribe(() => this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default })))
+    }
+  }
+
+  // 收藏歌曲
+  likeSong(id: string) {
+    this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
+    this.store$.dispatch(SetLikeId({ id }))
+  }
+  //#endregion
 }

@@ -1,5 +1,5 @@
-<div class="m-layer">
-  <div class="zbar">
+<div #modalContainer class="m-layer" [@showHide]="showModal" cdkDrag cdkDragBoundary=".cdk-overlay-container">
+  <div class="zbar" cdkDragHandle>
     <div class="zttl f-thide">标题</div>
   </div>
   <div class="zcls" title="关闭" (click)="hide()"></div>
