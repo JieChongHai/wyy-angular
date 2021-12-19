@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { ModalTypes } from '@store/reducers/member.reducer';
 
 @Component({
   selector: 'app-wy-layer-default',
@@ -7,6 +8,9 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerDefaultComponent implements OnInit {
+  ModalTypes = ModalTypes
+
+  @Output() changeModalType = new EventEmitter<ModalTypes>();
 
   constructor() { }
 

@@ -59,6 +59,8 @@ interface SizeType {
   ],
 })
 export class WyLayerModalComponent implements OnInit, AfterViewInit {
+  ModalTypes = ModalTypes
+
   showModal = EShowModalState.Hide
   modalType?: ModalTypes
   modalVisible?: boolean
@@ -93,11 +95,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     this.scrollStrategy = this.overlay.scrollStrategies.block()
     const appStore$ = this.store$.pipe(select(getMember))
     appStore$.pipe(select(getModalType)).subscribe((type) => {
-      console.log(type)
       this.watchModalType(type)
     })
     appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
-      console.log(visible)
       this.watchModalVisible(visible)
     })
     this.createOverlay()
@@ -105,7 +105,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
   watchModalType(type: ModalTypes) {
     this.modalType = type
+    this.cdr.markForCheck()
   }
+
   watchModalVisible(visible: boolean) {
     if (this.modalVisible !== visible) {
       this.modalVisible = visible
@@ -173,7 +175,6 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     const top = (h - size.h) / 2
     modalDom.style.left = left + 'px'
     modalDom.style.top = top + 'px'
-    console.log({ left, top })
   }
 
   // 获取当前窗口宽高

@@ -57,8 +57,8 @@
     (onLogin)="onLogin($event)"
     (onChangeModalType)="onChangeModalType($event)"
   ></app-wy-layer-login> -->
-  <app-wy-layer-default></app-wy-layer-default>
-  <!-- <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default> -->
+  <app-wy-layer-login name="login"></app-wy-layer-login>
+  <app-wy-layer-default (changeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
 
 

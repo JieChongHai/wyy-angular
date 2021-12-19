@@ -1,8 +1,12 @@
 import { Component } from '@angular/core'
+import { Store } from '@ngrx/store'
 import { SearchResult, Singer, Song, SongSheet } from '@shared/interfaces/common'
 import { isEmptyObject } from '@shared/untils'
+import { SetModalType } from '@store/actions/member.actions'
+import { ModalTypes } from '@store/reducers/member.reducer'
 import { iif, of } from 'rxjs'
 import { HomeService } from './services/home.service'
+import { NgxStoreModule } from './store'
 
 @Component({
   selector: 'app-root',
@@ -10,6 +14,7 @@ import { HomeService } from './services/home.service'
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
+  ModalTypes = ModalTypes
   title = 'wyy'
   menus = [
     {
@@ -24,7 +29,13 @@ export class AppComponent {
   // 关键字搜索数据
   searchData: SearchResult = {}
 
-  constructor(private homeServ: HomeService) {}
+  constructor(private homeServ: HomeService, private store$: Store<NgxStoreModule>) {}
+
+  //#region 弹框逻辑
+  onChangeModalType(modalType = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType }))
+  }
+  //#endregion
 
   onSearch(keyword: string): void {
     iif(() => !!keyword, this.homeServ.search(keyword), of({})).subscribe((res) => {
