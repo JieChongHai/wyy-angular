@@ -29,6 +29,7 @@
     "@ngneat/until-destroy": "^8.1.4",
     "@ngrx/store": "^12.5.0",
     "@ngrx/store-devtools": "^12.5.0",
+    "js-base64": "^3.7.2",
     "minireset.css": "0.0.7",
     "ng-zorro-antd": "^12.0.1",
     "query-string": "^7.0.1",

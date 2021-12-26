@@ -8,7 +8,13 @@ import { SongService } from 'src/app/services/song.service'
 import { Banner, HotTag, Singer, SongSheet } from '@shared/interfaces/common'
 import { ArrowType } from './components/wy-carousel/wy-carousel.component'
 import { BatchActionsService } from '@store/batch-actions.service'
+import { User } from '@shared/interfaces/member'
+import { MemberService } from 'src/app/services/member.service'
+import { NgxStoreModule } from '@store/index'
+import { getMember, getUserId } from '@store/selectors/member.selectors'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
+@UntilDestroy()
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -25,6 +31,8 @@ export class HomeComponent implements OnInit {
   sheetList: SongSheet[] = []
   // 推荐歌单
   singers: Singer[] = []
+  // 用户信息
+  user?: User
 
   @ViewChild(NzCarouselComponent, { static: true })
   private nzCarousel!: NzCarouselComponent
@@ -34,7 +42,9 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private sheetServ: SheetService,
     private songServ: SongService,
-    private batchActionsServ: BatchActionsService
+    private batchActionsServ: BatchActionsService,
+    private memberServ: MemberService,
+    private store$: Store<NgxStoreModule>
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +54,15 @@ export class HomeComponent implements OnInit {
       this.sheetList = sheetList
       this.singers = singers
     })
+    this.store$.pipe(select(getMember), select(getUserId), untilDestroyed(this)).subscribe((id) => this.watchUserId(id))
+  }
+
+  watchUserId(id: string): void {
+    if (!id) {
+      this.user = undefined
+      return
+    }
+    this.memberServ.getUserDetail(id).subscribe((user) => (this.user = user))
   }
 
   onBeforeChange({ from, to }: { from: number; to: number }): void {
