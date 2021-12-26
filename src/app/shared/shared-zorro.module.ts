@@ -13,6 +13,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message'
 import { NzBackTopModule } from 'ng-zorro-antd/back-top'
 import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -29,5 +30,6 @@ export const SHARED_ZORRO_MODULES = [
   NzMessageModule,
   NzBackTopModule,
   NzAvatarModule,
-  NzToolTipModule
+  NzToolTipModule,
+  NzNotificationModule
 ]

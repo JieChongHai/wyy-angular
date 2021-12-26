@@ -57,3 +57,8 @@ export interface UserSheet {
   self: SongSheet[];
   subscribed: SongSheet[];
 }
+
+export enum RecordType {
+  allData,
+  weekData
+}
