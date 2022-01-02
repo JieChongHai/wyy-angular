@@ -1,11 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnInit } from '@angular/core'
-import { Store } from '@ngrx/store'
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
+import { select, Store } from '@ngrx/store'
 import { SearchResult, Singer, Song, SongSheet } from '@shared/interfaces/common'
-import { LoginParams, User } from '@shared/interfaces/member'
+import { ICreateSheet, LikeSongParams, LoginParams, User } from '@shared/interfaces/member'
 import { isEmptyObject } from '@shared/untils'
-import { SetModalType, SetUserId } from '@store/actions/member.actions'
+import { SetModalType, SetModalVisible, SetUserId } from '@store/actions/member.actions'
 import { BatchActionsService } from '@store/batch-actions.service'
-import { ModalTypes } from '@store/reducers/member.reducer'
+import { ModalTypes, ShareInfo } from '@store/reducers/member.reducer'
+import { getLikeId, getMember, getModalType, getModalVisible, getShareInfo } from '@store/selectors/member.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { iif, of } from 'rxjs'
 import { HomeService } from './services/home.service'
@@ -13,7 +16,7 @@ import { MemberService } from './services/member.service'
 import { StorageCacheService } from './services/storage-cache.service'
 import { codeJson } from './shared/untils/base64'
 import { NgxStoreModule } from './store'
-
+@UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -35,7 +38,18 @@ export class AppComponent implements OnInit {
   // 关键字搜索数据
   searchData: SearchResult = {}
   user?: User | null
-  wyRememberLogin?: LoginParams;
+  wyRememberLogin?: LoginParams
+  userSheets: SongSheet[] = []
+  // 当前要收藏歌曲的id
+  likeId: string = ''
+  // 弹窗类型
+  modalType = ModalTypes.Default
+  // 弹窗显示
+  modalVisible = false
+  // 弹窗loading
+  showSpin = false
+  // 当前要分享歌曲的信息
+  shareInfo?: ShareInfo
 
   constructor(
     private homeServ: HomeService,
@@ -48,16 +62,54 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.initUserData()
+    this.initSubscribe()
   }
 
   initUserData(): void {
-    this.wyRememberLogin = this.storageCache.get('wyRememberLogin');
+    this.wyRememberLogin = this.storageCache.get('wyRememberLogin')
     const userId = this.storageCache.get('wyUserId')
     if (userId) {
       this.store$.dispatch(SetUserId({ id: userId }))
       this.memberServ.getUserDetail(userId).subscribe((user) => (this.user = user))
     }
   }
+
+  initSubscribe(): void {
+    const appStore$ = this.store$.pipe(select(getMember))
+    appStore$.pipe(select(getLikeId), untilDestroyed(this)).subscribe((id) => (this.likeId = id))
+    appStore$.pipe(select(getModalVisible), untilDestroyed(this)).subscribe((visib) => this.watchModalVisible(visib))
+    appStore$.pipe(select(getModalType), untilDestroyed(this)).subscribe((type) => this.watchModalType(type))
+    appStore$.pipe(select(getShareInfo), untilDestroyed(this)).subscribe((info) => this.watchShareInfo(info))
+  }
+
+  //#region 监听 Store Data
+  watchModalVisible(visibe: boolean) {
+    if (this.modalVisible !== visibe) {
+      this.modalVisible = visibe
+    }
+  }
+
+  watchModalType(type: ModalTypes) {
+    if (this.modalType !== type) {
+      this.modalType = type
+      if (type === ModalTypes.Like) {
+        this.getUserSheets()
+      }
+    }
+  }
+
+  watchShareInfo(info: ShareInfo | undefined) {
+    if (info) {
+      if (this.user) {
+        this.shareInfo = info
+        this.openModal(ModalTypes.Share)
+      } else {
+        // 未登录则打开登录弹框
+        this.openModal(ModalTypes.Default)
+      }
+    }
+  }
+  //#endregion
 
   //#region 弹框逻辑
   onChangeModalType(modalType = ModalTypes.Default) {
@@ -73,6 +125,45 @@ export class AppComponent implements OnInit {
   }
   //#endregion
 
+  // 获取当前用户的歌单
+  getUserSheets() {
+    if (this.user) {
+      this.memberServ.getUserSheets(String(this.user.profile.userId)).subscribe((userSheet) => {
+        this.userSheets = userSheet.self
+        this.store$.dispatch(SetModalVisible({ modalVisible: true }))
+      })
+    } else {
+      // 未登录则打开登录弹框
+      this.openModal(ModalTypes.Default)
+    }
+  }
+
+  // 收藏歌曲
+  onLikeSong(args: LikeSongParams) {
+    this.memberServ.likeSong(args).subscribe(
+      () => {
+        this.closeModal()
+        this.message.success('收藏成功')
+      },
+      (error) => {
+        this.message.error(error.msg || '收藏失败')
+      }
+    )
+  }
+
+  // 新建歌单
+  onCreateSheet({ sheetName }: ICreateSheet) {
+    this.memberServ.createSheet(sheetName).subscribe(
+      (pid) => {
+        this.onLikeSong({ pid, tracks: this.likeId })
+      },
+      (error) => {
+        this.message.error(error.msg || '新建失败')
+      }
+    )
+  }
+
+  // 登录
   onLogin(params: LoginParams) {
     this.memberServ.login(params).subscribe(
       (user) => {
@@ -94,6 +185,7 @@ export class AppComponent implements OnInit {
     )
   }
 
+  // 登出
   onLogout() {
     this.memberServ.logout().subscribe(
       () => {
@@ -108,6 +200,7 @@ export class AppComponent implements OnInit {
     )
   }
 
+  // 搜索歌曲
   onSearch(keyword: string): void {
     iif(() => !!keyword, this.homeServ.search(keyword), of({})).subscribe((res) => {
       this.searchData = this.highlightKeyWords(keyword, res)

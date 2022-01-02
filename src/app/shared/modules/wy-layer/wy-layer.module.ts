@@ -9,11 +9,18 @@ import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzAlertModule } from 'ng-zorro-antd/alert';
-import { NzListModule } from 'ng-zorro-antd/list';
+import { NzFormModule } from 'ng-zorro-antd/form'
+import { NzAlertModule } from 'ng-zorro-antd/alert'
+import { NzListModule } from 'ng-zorro-antd/list'
+import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
-const COMPONENTS: Array<Type<any>> = [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent]
+const COMPONENTS: Array<Type<any>> = [
+  WyLayerModalComponent,
+  WyLayerDefaultComponent,
+  WyLayerLoginComponent,
+  WyLayerLikeComponent,
+]
 
 const NZ_MODULES = [
   NzButtonModule,
@@ -22,16 +29,11 @@ const NZ_MODULES = [
   NzSpinModule,
   NzFormModule,
   NzAlertModule,
-  NzListModule
+  NzListModule,
+  NzIconModule,
 ]
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DragDropModule,
-    ...NZ_MODULES
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DragDropModule, ...NZ_MODULES],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
 })

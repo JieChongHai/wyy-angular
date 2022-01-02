@@ -1,0 +1,40 @@
+<div class="like">
+  <div class="create-sheet" *ngIf="creating; else sheetList">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label nzSpan="6">歌单名</nz-form-label>
+        <nz-form-control nzHasFeedback nzSpan="12" nzErrorTip="请输入歌单名">
+          <input nz-input formControlName="sheetName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzSpan]="12" [nzOffset]="6">
+          <div class="btns">
+            <button nz-button class="btn-back" (click)="creating = false">返回</button>
+            <button nz-button nzType="primary" [disabled]="!validateForm.valid">新建</button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+
+  <ng-template #sheetList>
+    <div class="sheet-list">
+      <div class="header" (click)="creating = true">
+        <i nz-icon nzType="folder-add" nzTheme="outline"></i>
+        <span>新建歌单</span>
+      </div>
+      <nz-list [nzDataSource]="sheets" [nzRenderItem]="itemTpl">
+        <ng-template #itemTpl let-item>
+          <nz-list-item class="list-item" (click)="onLike(item.id.toString())">
+            <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.trackCount + '首'" [nzAvatar]="item.coverImgUrl">
+              <ng-template #nzTitle>
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </nz-list-item-meta>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </div>
+  </ng-template>
+</div>

@@ -9,6 +9,7 @@ import { Song, SongSheet } from '@shared/interfaces/common'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
+import { MemberService } from 'src/app/services/member.service'
 
 @UntilDestroy()
 @Component({
@@ -35,7 +36,8 @@ export class SheetInfoComponent implements OnInit {
     private route: ActivatedRoute,
     private store$: Store<NgxStoreModule>,
     private songServ: SongService,
-    private messageServ: NzMessageService,
+    private memberServ: MemberService,
+    private message: NzMessageService,
     private batchActionServ: BatchActionsService
   ) {}
 
@@ -97,7 +99,7 @@ export class SheetInfoComponent implements OnInit {
         if (list[0] && list[0].url) {
           this.batchActionServ.insertSong(list[0], isPlay)
         } else {
-          this.messageServ.create('warning', '当前歌曲无版权！')
+          this.message.create('warning', '当前歌曲无版权！')
         }
       })
     }
@@ -117,10 +119,21 @@ export class SheetInfoComponent implements OnInit {
   }
 
   // 收藏歌单
-  onLikeSheet(id: string) {}
+  onLikeSheet(id: string) {
+    this.memberServ.likeSheet(id).subscribe(
+      () => {
+        this.message.success('收藏成功')
+      },
+      (error) => {
+        this.message.error(error.msg || '收藏失败')
+      }
+    )
+  }
 
   // 收藏歌曲
-  onLikeSong(id: string) {}
+  onLikeSong(id: string) {
+    this.batchActionServ.likeSong(id)
+  }
 
   // 分享
   shareResource(resource: Song | SongSheet, type = 'song') {}

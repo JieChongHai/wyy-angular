@@ -1,7 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Inject, Injectable } from '@angular/core'
 import { SampleBack, SongSheet } from '@shared/interfaces/common'
-import { LoginParams, RecordType, RecordVal, Signin, User, UserRecord, UserSheet } from '@shared/interfaces/member'
+import {
+  LikeSongParams,
+  LoginParams,
+  RecordType,
+  RecordVal,
+  Signin,
+  User,
+  UserRecord,
+  UserSheet,
+} from '@shared/interfaces/member'
 import { stringify } from 'query-string'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -43,7 +52,7 @@ export class MemberService {
     return this.http.get<UserRecord>(url, { params }).pipe(map((res) => res[RecordType[type]]))
   }
 
-  /** 用户歌单 */ 
+  /** 用户歌单 */
   getUserSheets(uid: string): Observable<UserSheet> {
     const url = `${this.baseURL}/user/playlist`
     const params = new HttpParams({ fromString: stringify({ uid }) })
@@ -56,5 +65,33 @@ export class MemberService {
         }
       })
     )
+  }
+
+  /** 收藏歌手 */
+  likeSinger(id: string, t = 1): Observable<number> {
+    const url = `${this.baseURL}/artist/sub`
+    const params = new HttpParams({ fromString: stringify({ id, t }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  /** 收藏歌曲 */
+  likeSong({ pid, tracks }: LikeSongParams): Observable<number> {
+    const url = `${this.baseURL}/playlist/tracks`
+    const params = new HttpParams({ fromString: stringify({ pid, tracks, op: 'add' }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  /** 新建歌单 */
+  createSheet(name: string): Observable<string> {
+    const url = `${this.baseURL}/playlist/create`
+    const params = new HttpParams({ fromString: stringify({ name }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => String(res.id)))
+  }
+
+  /** （收藏/取消收藏）歌单 */
+  likeSheet(id: string, t = 1): Observable<number> {
+    const url = `${this.baseURL}/playlist/subscribe`
+    const params = new HttpParams({ fromString: stringify({ id, t }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
   }
 }

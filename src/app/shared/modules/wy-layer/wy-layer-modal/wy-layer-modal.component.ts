@@ -18,16 +18,16 @@ import {
   AfterViewInit,
   Renderer2,
   ViewChild,
+  Input,
+  OnChanges,
 } from '@angular/core'
-import { select, Store } from '@ngrx/store'
-import { NgxStoreModule } from '@store/index'
-import { getMember, getModalType, getModalVisible } from '@store/selectors/member.selectors'
 import { ModalTypes } from '@store/reducers/member.reducer'
 import { OverlayReference } from '@angular/cdk/overlay/overlay-reference'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { DOCUMENT, isPlatformBrowser } from '@angular/common'
 import { animate, state, style, transition, trigger } from '@angular/animations'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
+import { NgChanges } from '@shared/interfaces/utils'
 
 enum EShowModalState {
   Show = 'show',
@@ -58,12 +58,12 @@ interface SizeType {
     ]),
   ],
 })
-export class WyLayerModalComponent implements OnInit, AfterViewInit {
+export class WyLayerModalComponent implements OnInit, OnChanges, AfterViewInit {
   ModalTypes = ModalTypes
 
+  @Input() modalType: ModalTypes = ModalTypes.Default
+  @Input() modalVisible: boolean = false
   showModal = EShowModalState.Hide
-  modalType?: ModalTypes
-  modalVisible?: boolean
   private isBrowser?: boolean
   private overlayRef?: OverlayRef
   private scrollStrategy!: BlockScrollStrategy
@@ -76,7 +76,6 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private plateformId: object,
     @Inject(DOCUMENT) private doc: Document,
     private cdr: ChangeDetectorRef,
-    private store$: Store<NgxStoreModule>,
     private overlay: Overlay,
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
     private elementRef: ElementRef,
@@ -84,6 +83,13 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private rd: Renderer2,
     private overlayContainer: OverlayContainer
   ) {}
+
+  ngOnChanges(changes: NgChanges<WyLayerModalComponent>): void {
+    const { modalVisible } = changes
+    if (modalVisible && !modalVisible.firstChange) {
+      this.handleVisibleChange()
+    }
+  }
 
   ngAfterViewInit(): void {
     this.overlayContainerEl = this.overlayContainer.getContainerElement()
@@ -93,42 +99,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.isBrowser = isPlatformBrowser(this.plateformId)
     this.scrollStrategy = this.overlay.scrollStrategies.block()
-    const appStore$ = this.store$.pipe(select(getMember))
-    appStore$.pipe(select(getModalType)).subscribe((type) => {
-      this.watchModalType(type)
-    })
-    appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
-      this.watchModalVisible(visible)
-    })
     this.createOverlay()
-  }
-
-  watchModalType(type: ModalTypes) {
-    this.modalType = type
-    this.cdr.markForCheck()
-  }
-
-  watchModalVisible(visible: boolean) {
-    if (this.modalVisible !== visible) {
-      this.modalVisible = visible
-
-      if (visible) {
-        this.scrollStrategy.enable()
-        this.showModal = EShowModalState.Show
-        this.overlayKeyboardDispatcher.add(this.overlayRef as OverlayReference)
-
-        this.listenResizeToCenter()
-        this.changePointerEvents(EPointerEvent.Auto)
-      } else {
-        this.scrollStrategy.disable()
-        this.showModal = EShowModalState.Hide
-        this.overlayKeyboardDispatcher.remove(this.overlayRef as OverlayReference)
-
-        this.resizeHandler && this.resizeHandler()
-        this.changePointerEvents(EPointerEvent.None)
-      }
-      this.cdr.markForCheck()
-    }
   }
 
   createOverlay() {
@@ -146,6 +117,25 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
   hide(): void {
     this.batchActionsServ.controlModal(false)
+  }
+
+  private handleVisibleChange(): void {
+    if (this.modalVisible) {
+      this.scrollStrategy.enable()
+      this.showModal = EShowModalState.Show
+      this.overlayKeyboardDispatcher.add(this.overlayRef as OverlayReference)
+
+      this.listenResizeToCenter()
+      this.changePointerEvents(EPointerEvent.Auto)
+    } else {
+      this.scrollStrategy.disable()
+      this.showModal = EShowModalState.Hide
+      this.overlayKeyboardDispatcher.remove(this.overlayRef as OverlayReference)
+
+      this.resizeHandler && this.resizeHandler()
+      this.changePointerEvents(EPointerEvent.None)
+    }
+    this.cdr.markForCheck()
   }
 
   // 设置弹框背景的可点击性

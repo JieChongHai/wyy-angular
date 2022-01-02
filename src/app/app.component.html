@@ -13,20 +13,20 @@
         <div class="right">
           <app-wy-search (keywordChange)="onSearch($event)" [searchData]="searchData"></app-wy-search>
           <div class="member">
-            <div class="no-login" *ngIf="!user else logined">
+            <div class="no-login" *ngIf="!user; else logined">
               <ul nz-menu nzTheme="dark" nzMode="horizontal">
                 <li nz-submenu>
                   <div title>
                     <span>登录</span>
-                    <i nz-icon type="down" nzTheme="outline"></i>
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
                   </div>
                   <ul>
-                    <li nz-menu-item (click)="openModal(ModalTypes.LoginByPhone);">
-                      <i nz-icon type="mobile" nzTheme="outline"></i>
+                    <li nz-menu-item (click)="openModal(ModalTypes.LoginByPhone)">
+                      <i nz-icon nzType="mobile" nzTheme="outline"></i>
                       手机登录
                     </li>
-                    <li nz-menu-item (click)="openModal(ModalTypes.Register);">
-                      <i nz-icon type="user-add" nzTheme="outline"></i>
+                    <li nz-menu-item (click)="openModal(ModalTypes.Register)">
+                      <i nz-icon nzType="user-add" nzTheme="outline"></i>
                       注册
                     </li>
                   </ul>
@@ -39,7 +39,7 @@
                   <li nz-submenu>
                     <div title>
                       <nz-avatar nzIcon="user" [nzSrc]="user?.profile?.avatarUrl"></nz-avatar>
-                      <i nz-icon type="down" nzTheme="outline"></i>
+                      <i nz-icon nzType="down" nzTheme="outline"></i>
                     </div>
                     <ul>
                       <li nz-menu-item [routerLink]="['/member', user?.profile?.userId]">
@@ -67,20 +67,24 @@
 <!-- 底部播放器 -->
 <app-wy-player [hidden]="false"></app-wy-player>
 
-
 <!-- 页面弹框 -->
-<app-wy-layer-modal>
-  <!-- <app-wy-layer-login
+<app-wy-layer-modal [modalType]="modalType" [modalVisible]="modalVisible">
+  <app-wy-layer-like
+    name="like"
+    [visible]="modalVisible"
+    [likeId]="likeId"
+    [sheets]="userSheets"
+    (createSheet)="onCreateSheet($event)"
+    (likeSong)="onLikeSong($event)"
+  ></app-wy-layer-like>
+  <app-wy-layer-login
     name="login"
-    [visible]="visible"
     [wyRememberLogin]="wyRememberLogin"
-    (onLogin)="onLogin($event)"
-    (onChangeModalType)="onChangeModalType($event)"
-  ></app-wy-layer-login> -->
-  <app-wy-layer-login name="login" [wyRememberLogin]="wyRememberLogin" (changeModalType)="onChangeModalType($event)" (login)="onLogin($event)"></app-wy-layer-login>
+    (changeModalType)="onChangeModalType($event)"
+    (login)="onLogin($event)"
+  ></app-wy-layer-login>
   <app-wy-layer-default (changeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
-
 
 <!-- 回到顶部按钮 -->
 <nz-back-top [nzTemplate]="backTop"></nz-back-top>
