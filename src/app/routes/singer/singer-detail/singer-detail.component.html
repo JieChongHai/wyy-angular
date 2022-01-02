@@ -75,6 +75,14 @@
   <div class="dt-right">
     <div class="right-wrap">
       <h3>相似歌手</h3>
+      <ul class="clearfix">
+        <li *ngFor="let item of simiSingers; trackBy: trackByFn" [routerLink]="['/singer', item.id]">
+          <div class="pic">
+            <img [src]="item.picUrl + '?param=50y50'" [alt]="item.name" />
+          </div>
+          <p class="ellipsis">{{ item.name }}</p>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

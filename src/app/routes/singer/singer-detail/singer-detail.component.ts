@@ -6,7 +6,7 @@ import { BatchActionsService } from '@store/batch-actions.service'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { SongService } from 'src/app/services/song.service'
 import { map } from 'rxjs/operators'
-import { SingerDetail, Song, SongSheet } from '@shared/interfaces/common'
+import { Singer, SingerDetail, Song, SongSheet } from '@shared/interfaces/common'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 
@@ -18,8 +18,11 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 })
 export class SingerDetailComponent implements OnInit {
   singerDetail!: SingerDetail
+  simiSingers!: Singer[];
   currentSong?: Song
   currentIndex = -1
+  // TODO: 找到所有的 *ngFor 看看是否需要trackBy（数组被全量更新的时候）
+  trackByFn = (index: number, singer: Singer) => singer.id
 
   constructor(
     private route: ActivatedRoute,
@@ -35,8 +38,9 @@ export class SingerDetailComponent implements OnInit {
         map((res) => res.singerDetail),
         untilDestroyed(this)
       )
-      .subscribe((singerDetail) => {
+      .subscribe(([singerDetail, simiSingers]) => {
         this.singerDetail = singerDetail
+        this.simiSingers = simiSingers
         this.handleCurrentSong()
       })
   }
