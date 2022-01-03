@@ -66,10 +66,14 @@ export interface LikeSongParams {
   tracks: string
 }
 
+export enum ShareType {
+  Song = 'song',
+  Playlist = 'playlist',
+}
 export interface ShareParams {
   id: string
-  msg: string
-  type: string
+  msg: string | null
+  type: ShareType
 }
 
 export interface ICreateSheet {

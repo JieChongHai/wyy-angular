@@ -42,7 +42,7 @@
             >
               <span>收藏</span>({{ sheetInfo.subscribedCount }})
             </button>
-            <button class="btn share" nz-button (click)="shareResource(sheetInfo, 'playlist')">
+            <button class="btn share" nz-button (click)="shareResource(sheetInfo, ShareType.Playlist)">
               <span>分享</span>({{ sheetInfo.shareCount }})
             </button>
           </div>

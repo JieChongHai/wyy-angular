@@ -69,6 +69,13 @@
 
 <!-- 页面弹框 -->
 <app-wy-layer-modal [modalType]="modalType" [modalVisible]="modalVisible">
+  <app-wy-layer-share
+    name="share"
+    [visible]="modalVisible"
+    [shareInfo]="shareInfo"
+    (cancel)="closeModal()"
+    (share)="onShare($event)"
+  ></app-wy-layer-share>
   <app-wy-layer-like
     name="like"
     [visible]="modalVisible"

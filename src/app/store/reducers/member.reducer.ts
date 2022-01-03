@@ -1,4 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store'
+import { ShareType } from '@shared/interfaces/member'
 import { SetLikeId, SetModalType, SetModalVisible, SetShareInfo, SetUserId } from '@store/actions/member.actions'
 
 //#region interface
@@ -11,7 +12,7 @@ export enum ModalTypes {
 }
 export interface ShareInfo {
   id: string
-  type: string
+  type: ShareType
   txt: string
 }
 export interface MemberState {

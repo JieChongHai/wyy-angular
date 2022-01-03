@@ -1,0 +1,25 @@
+<div class="share">
+  <div class="u-txtwrap">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="不能超过140个字">
+          <nz-textarea-count [nzMaxCharacterCount]="140">
+            <textarea rows="6" formControlName="msg" nz-input></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <div class="info">
+      <div class="text">
+        <p class="f-thide ellipsis">{{ shareInfo?.txt }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tools clearfix">
+    <div class="btns">
+      <button nz-button (click)="cancel.emit()">取消</button>
+      <button nz-button nzType="primary" [disabled]="!validateForm.valid" (click)="submitForm()">分享</button>
+    </div>
+  </div>
+</div>

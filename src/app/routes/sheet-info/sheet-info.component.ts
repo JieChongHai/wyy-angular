@@ -5,11 +5,13 @@ import { NgxStoreModule } from '@store/index'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { SongService } from 'src/app/services/song.service'
 import { map } from 'rxjs/operators'
-import { Song, SongSheet } from '@shared/interfaces/common'
+import { Singer, Song, SongSheet } from '@shared/interfaces/common'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 import { MemberService } from 'src/app/services/member.service'
+import { ShareType } from '@shared/interfaces/member'
+import { SetShareInfo } from '@store/actions/member.actions'
 
 @UntilDestroy()
 @Component({
@@ -17,6 +19,7 @@ import { MemberService } from 'src/app/services/member.service'
   styleUrls: ['./sheet-info.component.less'],
 })
 export class SheetInfoComponent implements OnInit {
+  ShareType = ShareType
   sheetInfo!: SongSheet
   currentSong?: Song
   currentIndex = -1
@@ -136,6 +139,19 @@ export class SheetInfoComponent implements OnInit {
   }
 
   // 分享
-  shareResource(resource: Song | SongSheet, type = 'song') {}
+  shareResource(resource: Song | SongSheet, type = ShareType.Song) {
+    let txt = ''
+    if (type === ShareType.Playlist) {
+      txt = this.makeShareTxt('歌单', resource.name, (resource as SongSheet).creator.nickname)
+    } else {
+      txt = this.makeShareTxt('歌曲', resource.name, (resource as Song).ar)
+    }
+    this.store$.dispatch(SetShareInfo({ info: { id: String(resource.id), type, txt } }))
+  }
+
+  private makeShareTxt(type: string, name: string, makeBy: string | Singer[]): string {
+    const makeByStr = Array.isArray(makeBy) ? makeBy.map((item) => item.name).join('/') : makeBy
+    return `${type}: ${name} -- ${makeByStr}`
+  }
   //#endregion
 }

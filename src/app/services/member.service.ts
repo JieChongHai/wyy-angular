@@ -6,6 +6,7 @@ import {
   LoginParams,
   RecordType,
   RecordVal,
+  ShareParams,
   Signin,
   User,
   UserRecord,
@@ -93,5 +94,33 @@ export class MemberService {
     const url = `${this.baseURL}/playlist/subscribe`
     const params = new HttpParams({ fromString: stringify({ id, t }) })
     return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  // 分享（歌曲/歌单）
+  shareResource({ id, msg, type }: ShareParams): Observable<number> {
+    const url = `${this.baseURL}/share/resource`
+    const params = new HttpParams({ fromString: stringify({ id, msg, type }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  // 发送验证码
+  sendCode(phone: number): Observable<number> {
+    const url = `${this.baseURL}/captcha/sent`
+    const params = new HttpParams({ fromString: stringify({ phone }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  // 校验验证码
+  checkCode(phone: number, captcha: number): Observable<number> {
+    const url = `${this.baseURL}/captcha/verify`
+    const params = new HttpParams({ fromString: stringify({ phone, captcha }) })
+    return this.http.get<SampleBack>(url, { params }).pipe(map((res) => res.code))
+  }
+
+  // 校验用户是否已注册
+  checkExist(phone: number): Observable<number> {
+    const url = `${this.baseURL}/cellphone/existence/check`
+    const params = new HttpParams({ fromString: stringify({ phone }) })
+    return this.http.get<{ exist: number }>(url, { params }).pipe(map((res) => res.exist))
   }
 }

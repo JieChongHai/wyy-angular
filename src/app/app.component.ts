@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 import { select, Store } from '@ngrx/store'
 import { SearchResult, Singer, Song, SongSheet } from '@shared/interfaces/common'
-import { ICreateSheet, LikeSongParams, LoginParams, User } from '@shared/interfaces/member'
+import { ICreateSheet, LikeSongParams, LoginParams, ShareParams, User } from '@shared/interfaces/member'
 import { isEmptyObject } from '@shared/untils'
 import { SetModalType, SetModalVisible, SetUserId } from '@store/actions/member.actions'
 import { BatchActionsService } from '@store/batch-actions.service'
@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
   // 弹窗loading
   showSpin = false
   // 当前要分享歌曲的信息
-  shareInfo?: ShareInfo
+  shareInfo!: ShareInfo
 
   constructor(
     private homeServ: HomeService,
@@ -159,6 +159,19 @@ export class AppComponent implements OnInit {
       },
       (error) => {
         this.message.error(error.msg || '新建失败')
+      }
+    )
+  }
+
+  // 分享
+  onShare(info: ShareParams) {
+    this.memberServ.shareResource(info).subscribe(
+      () => {
+        this.closeModal()
+        this.message.success('分享成功')
+      },
+      (error) => {
+        this.message.error(error.msg || '分享失败')
       }
     )
   }
