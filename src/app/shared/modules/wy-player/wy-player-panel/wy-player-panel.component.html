@@ -5,7 +5,7 @@
         播放列表（<span>{{ songList?.length }}</span
         >）
       </h4>
-      <div class="add-all"><i class="icon" title="收藏全部"></i> 收藏全部</div>
+      <div class="add-all" (click.stop)="onlikeSongs()"><i class="icon" title="收藏全部"></i> 收藏全部</div>
       <span class="line"></span>
       <div class="clear-all" (click)="clearSong.emit()"><i class="icon trush" title="清除"></i> 清除</div>
       <p class="playing-name">{{ currentSong?.name }}</p>
@@ -26,8 +26,8 @@
           <i class="col arrow"></i>
           <div class="col name ellipsis">{{ item.name }}</div>
           <div class="col icons">
-            <i class="ico like" title="收藏"></i>
-            <i class="ico share" title="分享"></i>
+            <i class="ico like" title="收藏" (click.stop)="likeSong.emit(item.id.toString())"></i>
+            <i class="ico share" title="分享" (click.stop)="shareSong.emit(item)"></i>
             <i class="ico trush" title="删除" (click.stop)="deleteSong.emit(item)"></i>
           </div>
           <div class="singers clearfix ellipsis">

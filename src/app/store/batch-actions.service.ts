@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
 import { select, Store } from '@ngrx/store'
-import { CurrentActions, PlayModeType, Song } from '@shared/interfaces/common'
+import { CurrentActions, PlayModeType, Singer, Song, SongSheet } from '@shared/interfaces/common'
+import { ShareType } from '@shared/interfaces/member'
 import { shuffle } from '@shared/untils'
 import { timer } from 'rxjs'
 import { NgxStoreModule } from '.'
-import { SetLikeId, SetModalType, SetModalVisible } from './actions/member.actions'
+import { SetLikeId, SetModalType, SetModalVisible, SetShareInfo } from './actions/member.actions'
 import { SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.actions'
 import { MemberState, ModalTypes } from './reducers/member.reducer'
 import { PlayState } from './reducers/player.reducer'
@@ -144,6 +145,22 @@ export class BatchActionsService {
   likeSong(id: string) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
     this.store$.dispatch(SetLikeId({ id }))
+  }
+
+  // 分享
+  shareResource(resource: Song | SongSheet, type = ShareType.Song) {
+    let txt = ''
+    if (type === ShareType.Playlist) {
+      txt = this.makeShareTxt('歌单', resource.name, (resource as SongSheet).creator.nickname)
+    } else {
+      txt = this.makeShareTxt('歌曲', resource.name, (resource as Song).ar)
+    }
+    this.store$.dispatch(SetShareInfo({ info: { id: String(resource.id), type, txt } }))
+  }
+
+  private makeShareTxt(type: string, name: string, makeBy: string | Singer[]): string {
+    const makeByStr = Array.isArray(makeBy) ? makeBy.map((item) => item.name).join('/') : makeBy
+    return `${type}: ${name} -- ${makeByStr}`
   }
   //#endregion
 }

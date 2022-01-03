@@ -85,13 +85,14 @@ export class SongInfoComponent implements OnInit {
     }
   }
 
-  // 收藏歌单
-  onLikeSheet(id: string) {}
-
   // 收藏歌曲
-  onLikeSong(id: string) {}
+  onLikeSong(id: string) {
+    this.batchActionServ.likeSong(id)
+  }
 
   // 分享
-  shareResource(resource: Song | SongSheet, type = 'song') {}
+  onShareSong(song: Song) {
+    this.batchActionServ.shareResource(song)
+  }
   //#endregion
 }

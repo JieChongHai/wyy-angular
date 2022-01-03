@@ -137,21 +137,10 @@ export class SheetInfoComponent implements OnInit {
   onLikeSong(id: string) {
     this.batchActionServ.likeSong(id)
   }
-
+  
   // 分享
   shareResource(resource: Song | SongSheet, type = ShareType.Song) {
-    let txt = ''
-    if (type === ShareType.Playlist) {
-      txt = this.makeShareTxt('歌单', resource.name, (resource as SongSheet).creator.nickname)
-    } else {
-      txt = this.makeShareTxt('歌曲', resource.name, (resource as Song).ar)
-    }
-    this.store$.dispatch(SetShareInfo({ info: { id: String(resource.id), type, txt } }))
-  }
-
-  private makeShareTxt(type: string, name: string, makeBy: string | Singer[]): string {
-    const makeByStr = Array.isArray(makeBy) ? makeBy.map((item) => item.name).join('/') : makeBy
-    return `${type}: ${name} -- ${makeByStr}`
+    this.batchActionServ.shareResource(resource, type)
   }
   //#endregion
 }

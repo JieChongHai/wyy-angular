@@ -36,6 +36,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   @Output() deleteSong = new EventEmitter<Song>()
   @Output() clearSong = new EventEmitter<void>()
   @Output() toInfo = new EventEmitter<[string, number]>()
+  @Output() likeSong = new EventEmitter<string>()
+  @Output() shareSong = new EventEmitter<Song>()
 
   scrollY = 0 // 歌曲播放列表滚轮滚动高度
   currentIndex?: number // 当前播放歌曲在 songList 里的索引
@@ -101,6 +103,14 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {}
+
+  // 批量收藏
+  onlikeSongs() {
+    if (this.songList?.length) {
+      const ids = this.songList.map((item) => item.id).join(',')
+      this.likeSong.emit(ids)
+    }
+  }
 
   goToInfo(path: [string, number]) {
     this.toInfo.emit(path)

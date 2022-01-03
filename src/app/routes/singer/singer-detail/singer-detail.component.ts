@@ -18,7 +18,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 })
 export class SingerDetailComponent implements OnInit {
   singerDetail!: SingerDetail
-  simiSingers!: Singer[];
+  simiSingers!: Singer[]
   currentSong?: Song
   currentIndex = -1
   // TODO: 找到所有的 *ngFor 看看是否需要trackBy（数组被全量更新的时候）
@@ -81,13 +81,20 @@ export class SingerDetailComponent implements OnInit {
     }
   }
 
-  // 收藏歌单
-  onLikeSheet(id: string) {}
+  // 批量收藏
+  onLikeSongs(songs: Song[]) {
+    const ids = songs.map((item) => item.id).join(',')
+    this.onLikeSong(ids)
+  }
 
   // 收藏歌曲
-  onLikeSong(id: string) {}
+  onLikeSong(id: string) {
+    this.batchActionServ.likeSong(id)
+  }
 
   // 分享
-  shareResource(resource: Song | SongSheet, type = 'song') {}
+  onShareSong(song: Song) {
+    this.batchActionServ.shareResource(song)
+  }
   //#endregion
 }

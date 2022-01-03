@@ -287,6 +287,20 @@ export class WyPlayerComponent implements OnInit, AfterViewInit {
   //#endregion
 
   //#region 右侧4个按钮
+  // 收藏歌曲
+  onLikeSong(id?: string) {
+    if (id) {
+      this.batchActionsServ.likeSong(id)
+    }
+  }
+
+  // 分享
+  onShareSong(song?: Song) {
+    if (song) {
+      this.batchActionsServ.shareResource(song)
+    }
+  }
+
   toggleVolumnPanel(): void {
     this.togglePanel('showVolumnPanel')
   }

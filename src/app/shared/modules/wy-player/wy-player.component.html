@@ -52,8 +52,8 @@
       </div>
       <!-- 右侧4个按钮 -->
       <div class="oper">
-        <i class="like" tite="收藏"></i>
-        <i class="share" tite="分享"></i>
+        <i class="like" tite="收藏" (click)="onLikeSong(currentSong?.id?.toString())"></i>
+        <i class="share" tite="分享" (click)="onShareSong(currentSong)"></i>
       </div>
       <div class="ctrl">
         <i class="volume" tite="音量" (click)="toggleVolumnPanel()"></i>
@@ -90,6 +90,8 @@
         (deleteSong)="onDeleteSong($event)"
         (clearSong)="onClearSong()"
         (toInfo)="onToInfo($event)"
+        (likeSong)="onLikeSong($event)"
+        (shareSong)="onShareSong($event)"
       ></app-wy-player-panel>
     </div>
   </div>

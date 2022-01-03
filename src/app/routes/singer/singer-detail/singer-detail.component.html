@@ -22,7 +22,9 @@
             </button>
             <button class="add" nz-button nzType="primary" (click)="onAddSongs(singerDetail.hotSongs)">+</button>
           </nz-button-group>
-          <button class="btn like" nz-button><span>收藏</span>&nbsp;&nbsp;{{ singerDetail.hotSongs.length }}</button>
+          <button class="btn like" nz-button (click)="onLikeSongs(singerDetail.hotSongs)">
+            <span>收藏</span>&nbsp;&nbsp;{{ singerDetail.hotSongs.length }}
+          </button>
         </div>
 
         <!-- 表格 -->
@@ -60,8 +62,8 @@
                 <span>{{ item.dt / 1000 | formatTime }}</span>
                 <p class="icons">
                   <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                  <i class="ico like" title="收藏"></i>
-                  <i class="ico share" title="分享"></i>
+                  <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
+                  <i class="ico share" title="分享" (click)="onShareSong(item)"></i>
                 </p>
               </td>
               <td>{{ item.al.name }}</td>

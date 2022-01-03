@@ -99,9 +99,13 @@ export class RecordDetailComponent implements OnInit {
   }
 
   // 收藏歌曲
-  onLikeSong(id: string) {}
+  onLikeSong(id: string) {
+    this.batchActionsServ.likeSong(id)
+  }
 
   // 分享歌曲
-  onShareSong(song: Song) {}
+  onShareSong(song: Song) {
+    this.batchActionsServ.shareResource(song)
+  }
 
 }
