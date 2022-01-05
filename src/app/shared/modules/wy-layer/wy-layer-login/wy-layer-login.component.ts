@@ -50,10 +50,6 @@ export class WyLayerLoginComponent implements OnChanges {
         this.validateForm.patchValue({ phone, password, remember })
       }
     }
-
-    if (visible && !visible.firstChange) {
-      this.validateForm.markAllAsTouched()
-    }
   }
 
   initForm(): void {

@@ -10,7 +10,7 @@ import { NgChanges } from '@shared/interfaces/utils'
   styleUrls: ['./wy-layer-like.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WyLayerLikeComponent implements OnInit {
+export class WyLayerLikeComponent {
   /** 用户歌单 */
   @Input() sheets: SongSheet[] = []
   /** 要收藏的歌曲Id */
@@ -25,7 +25,9 @@ export class WyLayerLikeComponent implements OnInit {
   creating = false
   validateForm: FormGroup = this.fb.group({})
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    this.initForm()
+  }
 
   ngOnChanges(changes: NgChanges<WyLayerLikeComponent>): void {
     if (changes.visible) {
@@ -34,10 +36,6 @@ export class WyLayerLikeComponent implements OnInit {
         this.creating = false;
       }
     }
-  }
-
-  ngOnInit(): void {
-    this.initForm()
   }
 
   initForm(): void {

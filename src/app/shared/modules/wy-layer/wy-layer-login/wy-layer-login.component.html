@@ -1,6 +1,6 @@
 <div class="login-phone modal-content">
   <div class="modal-wrap">
-    <form nz-form class="login-form" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form *ngIf="visible" nz-form class="login-form" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control nzHasFeedback nzErrorTip="请输入正确的手机号">
           <nz-input-group nzPrefixIcon="mobile">
