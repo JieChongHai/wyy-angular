@@ -25,6 +25,7 @@ export interface Singer {
   alias: string[]
   picUrl: string
   albumSize: number
+  followed?: boolean
 }
 
 export interface SingerDetail {

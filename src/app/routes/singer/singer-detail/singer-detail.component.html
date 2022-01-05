@@ -11,7 +11,11 @@
           <img [src]="singerDetail.artist.picUrl" [alt]="singerDetail.artist.name" class="full-height" />
         </div>
 
-        <button class="btn btn-like"></button>
+        <button
+          class="btn btn-like"
+          [ngClass]="{ 'btn-liked': followed }"
+          (click)="onLikeSinger(singerDetail.artist.id.toString())"
+        ></button>
       </div>
 
       <div class="top-50">

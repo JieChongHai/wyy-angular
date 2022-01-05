@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators'
 import { Singer, SingerDetail, Song, SongSheet } from '@shared/interfaces/common'
 import { getCurrentSong, getPlayer } from '@store/selectors/player.selectors'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
+import { MemberService } from 'src/app/services/member.service'
 
 @UntilDestroy()
 @Component({
@@ -21,6 +22,7 @@ export class SingerDetailComponent implements OnInit {
   simiSingers!: Singer[]
   currentSong?: Song
   currentIndex = -1
+  followed = false
   // TODO: 找到所有的 *ngFor 看看是否需要trackBy（数组被全量更新的时候）
   trackByFn = (index: number, singer: Singer) => singer.id
 
@@ -28,6 +30,7 @@ export class SingerDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private store$: Store<NgxStoreModule>,
     private songServ: SongService,
+    private memberServ: MemberService,
     private messageServ: NzMessageService,
     private batchActionServ: BatchActionsService
   ) {}
@@ -40,6 +43,7 @@ export class SingerDetailComponent implements OnInit {
       )
       .subscribe(([singerDetail, simiSingers]) => {
         this.singerDetail = singerDetail
+        this.followed = !!this.singerDetail.artist.followed
         this.simiSingers = simiSingers
         this.handleCurrentSong()
       })
@@ -95,6 +99,23 @@ export class SingerDetailComponent implements OnInit {
   // 分享
   onShareSong(song: Song) {
     this.batchActionServ.shareResource(song)
+  }
+
+  // 收藏歌手
+  onLikeSinger(id: string) {
+    const typeInfo = {
+      type: this.followed ? 2 : 1,
+      msg: this.followed ? '取消收藏' : '收藏',
+    }
+    this.memberServ.likeSinger(id, typeInfo.type).subscribe(
+      () => {
+        this.followed = !this.followed
+        this.messageServ.success(typeInfo.msg + '成功')
+      },
+      (err) => {
+        this.messageServ.error(err.msg || typeInfo.msg + '失败')
+      }
+    )
   }
   //#endregion
 }

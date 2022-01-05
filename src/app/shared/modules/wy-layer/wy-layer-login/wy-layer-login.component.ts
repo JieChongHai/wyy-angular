@@ -1,11 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  EventEmitter,
-  Output,
-  Input,
-  OnChanges,
-} from '@angular/core'
+import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input, OnChanges, OnInit, ChangeDetectorRef } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { LoginParams } from '@shared/interfaces/member'
 import { NgChanges } from '@shared/interfaces/utils'
@@ -22,11 +15,13 @@ import { codeJson } from 'src/app/shared/untils/base64'
 export class WyLayerLoginComponent implements OnChanges {
   ModalTypes = ModalTypes
   validateForm!: FormGroup
-  /** 初始化表单需要的参数 */ 
+  /** 弹框内容的显隐状态 */
+  @Input() visible: boolean = false
+  /** 初始化表单需要的参数 */
   @Input() wyRememberLogin?: LoginParams
-  /** 切换操作 */ 
+  /** 切换操作 */
   @Output() changeModalType = new EventEmitter<ModalTypes>()
-  /** 登录操作 */ 
+  /** 登录操作 */
   @Output() login = new EventEmitter<LoginParams>()
 
   submitForm(): void {
@@ -42,16 +37,22 @@ export class WyLayerLoginComponent implements OnChanges {
     }
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.initForm()
   }
 
   ngOnChanges(changes: NgChanges<WyLayerLoginComponent>): void {
-    const { wyRememberLogin } = changes
+    const { wyRememberLogin, visible } = changes
     if (wyRememberLogin) {
       const data = codeJson(this.wyRememberLogin || {}, 'decode')
       const { phone = '', password = '', remember = false } = data
-      this.validateForm.patchValue({ phone, password, remember })
+      if (wyRememberLogin.currentValue) {
+        this.validateForm.patchValue({ phone, password, remember })
+      }
+    }
+
+    if (visible && !visible.firstChange) {
+      this.validateForm.markAllAsTouched()
     }
   }
 
