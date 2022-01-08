@@ -11,6 +11,7 @@ import { ModalTypes, ShareInfo } from '@store/reducers/member.reducer'
 import { getLikeId, getMember, getModalType, getModalVisible, getShareInfo } from '@store/selectors/member.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { iif, of } from 'rxjs'
+import { finalize } from 'rxjs/operators'
 import { HomeService } from './services/home.service'
 import { MemberService } from './services/member.service'
 import { StorageCacheService } from './services/storage-cache.service'
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit {
   // 弹窗显示
   modalVisible = false
   // 弹窗loading
-  showSpin = false
+  loading = false
   // 当前要分享歌曲的信息
   shareInfo!: ShareInfo
 
@@ -176,9 +177,17 @@ export class AppComponent implements OnInit {
     )
   }
 
+  // TODO: 注册
+  onRegister(phone: string) {
+    this.message.success(phone + '注册成功')
+  }
+
   // 登录
   onLogin(params: LoginParams) {
-    this.memberServ.login(params).subscribe(
+    this.loading = true
+    this.memberServ.login(params).pipe(
+      finalize(() => this.loading = false)
+    ).subscribe(
       (user) => {
         this.closeModal()
         this.message.success('登录成功')

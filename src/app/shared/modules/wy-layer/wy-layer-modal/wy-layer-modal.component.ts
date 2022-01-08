@@ -70,6 +70,7 @@ export class WyLayerModalComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() modalType: ModalTypes = ModalTypes.Default
   @Input() modalVisible: boolean = false
+  @Input() loading: boolean = false
   showModal = EShowModalState.Hide
   private isBrowser?: boolean
   private overlayRef?: OverlayRef

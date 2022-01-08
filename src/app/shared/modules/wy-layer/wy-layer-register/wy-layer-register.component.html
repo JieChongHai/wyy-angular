@@ -1,7 +1,7 @@
 <div class="register modal-content">
-  <div class="modal-wrap">
+  <div class="modal-wrap" *ngIf="visible">
     <form
-      *ngIf="visible"
+      *ngIf="!showOtp; else otp"
       nz-form
       class="login-form"
       nzLayout="vertical"
@@ -31,6 +31,18 @@
       </nz-form-item>
     </form>
   </div>
+
+  <ng-template #otp>
+    <app-wy-check-code
+      [time]="countDown"
+      [phone]="phoneCtrl.value"
+      [codeValid]="codeValid"
+      (checkCode)="onCheckCode($event)"
+      (reSendCode)="sendCode()"
+      (checkExist)="onCheckExist()"
+    >
+    </app-wy-check-code>
+  </ng-template>
 
   <div class="m-footer clearfix">
     <a (click)="changeType()">< 其它登录方式</a>

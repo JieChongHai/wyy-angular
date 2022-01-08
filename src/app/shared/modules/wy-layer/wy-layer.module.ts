@@ -16,6 +16,8 @@ import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component
 import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component'
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component'
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component'
+import { WyCheckCodeComponent } from './wy-check-code/wy-check-code.component'
+import { WyOtpComponent } from './wy-otp/wy-otp.component'
 
 const COMPONENTS: Array<Type<any>> = [
   WyLayerModalComponent,
@@ -24,6 +26,8 @@ const COMPONENTS: Array<Type<any>> = [
   WyLayerLikeComponent,
   WyLayerShareComponent,
   WyLayerRegisterComponent,
+  WyCheckCodeComponent,
+  WyOtpComponent,
 ]
 
 const NZ_MODULES = [

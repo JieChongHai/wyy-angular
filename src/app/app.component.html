@@ -68,7 +68,7 @@
 <app-wy-player [hidden]="false"></app-wy-player>
 
 <!-- 页面弹框 -->
-<app-wy-layer-modal [modalType]="modalType" [modalVisible]="modalVisible">
+<app-wy-layer-modal [loading]="loading" [modalType]="modalType" [modalVisible]="modalVisible">
   <app-wy-layer-share
     name="share"
     [visible]="modalVisible"
@@ -88,6 +88,7 @@
     name="register"
     [visible]="modalVisible"
     (changeModalType)="onChangeModalType($event)"
+    (register)="onRegister($event)"
   ></app-wy-layer-register>
   <app-wy-layer-login
     name="login"
