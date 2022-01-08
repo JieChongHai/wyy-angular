@@ -60,6 +60,13 @@ interface SizeType {
 })
 export class WyLayerModalComponent implements OnInit, OnChanges, AfterViewInit {
   ModalTypes = ModalTypes
+  ModalTitle = {
+    [ModalTypes.Register]: '注册',
+    [ModalTypes.LoginByPhone]: '手机登录',
+    [ModalTypes.Share]: '分享',
+    [ModalTypes.Like]: '收藏',
+    [ModalTypes.Default]: '',
+  }
 
   @Input() modalType: ModalTypes = ModalTypes.Default
   @Input() modalVisible: boolean = false

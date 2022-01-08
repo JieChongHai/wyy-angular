@@ -84,6 +84,11 @@
     (createSheet)="onCreateSheet($event)"
     (likeSong)="onLikeSong($event)"
   ></app-wy-layer-like>
+  <app-wy-layer-register
+    name="register"
+    [visible]="modalVisible"
+    (changeModalType)="onChangeModalType($event)"
+  ></app-wy-layer-register>
   <app-wy-layer-login
     name="login"
     [visible]="modalVisible"

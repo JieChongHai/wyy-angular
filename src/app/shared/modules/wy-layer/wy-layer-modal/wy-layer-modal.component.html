@@ -1,6 +1,6 @@
 <div #modalContainer class="m-layer" [@showHide]="showModal" cdkDrag cdkDragBoundary=".cdk-overlay-container">
   <div class="zbar" cdkDragHandle>
-    <div class="zttl f-thide">标题</div>
+    <div class="zttl f-thide">{{ ModalTitle[modalType] }}</div>
   </div>
   <div class="zcls" title="关闭" (click)="hide()"></div>
   <ng-container [ngSwitch]="modalType">
