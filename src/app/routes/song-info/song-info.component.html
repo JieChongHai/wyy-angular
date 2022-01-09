@@ -57,7 +57,7 @@
               </div>
             </div>
             <!-- TODO: 这个展开在纯音乐的时候不要展示 -->
-            <div class="toggle-expand" (click)="toggleLyric()" *ngIf="true">
+            <div class="toggle-expand" (click)="toggleLyric()" *ngIf="lyric.length >3">
               <span>{{ controlLyric.label }}</span>
               <i nz-icon [nzType]="controlLyric.iconCls" nzTheme="outline"></i>
             </div>

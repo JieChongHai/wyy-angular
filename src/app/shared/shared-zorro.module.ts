@@ -15,6 +15,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
 
 export const SHARED_ZORRO_MODULES = [
   NzButtonModule,
@@ -33,5 +34,6 @@ export const SHARED_ZORRO_MODULES = [
   NzAvatarModule,
   NzToolTipModule,
   NzNotificationModule,
-  NzDividerModule
+  NzDividerModule,
+  NzProgressModule
 ]

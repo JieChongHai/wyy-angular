@@ -1,11 +1,24 @@
 <div id="page">
+  <nz-progress
+    *ngIf="loadPercent < 100"
+    nzStrokeWidth="5"
+    [nzShowInfo]="false"
+    nzStatus="active"
+    [nzPercent]="loadPercent"
+  ></nz-progress>
+  
   <nz-layout>
     <nz-header class="header">
       <div class="wrap">
         <div class="left">
           <h1>Music</h1>
           <ul nz-menu nzTheme="dark" nzMode="horizontal">
-            <li nz-menu-item *ngFor="let menu of menus" [routerLink]="menu.path">
+            <li
+              nz-menu-item
+              *ngFor="let menu of menus"
+              [routerLink]="menu.path"
+              [nzSelected]="pageTitle === menu.label"
+            >
               {{ menu.label }}
             </li>
           </ul>

@@ -1,5 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnInit } from '@angular/core'
+import { Title } from '@angular/platform-browser'
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 import { select, Store } from '@ngrx/store'
 import { SearchResult, Singer, Song, SongSheet } from '@shared/interfaces/common'
@@ -10,8 +12,8 @@ import { BatchActionsService } from '@store/batch-actions.service'
 import { ModalTypes, ShareInfo } from '@store/reducers/member.reducer'
 import { getLikeId, getMember, getModalType, getModalVisible, getShareInfo } from '@store/selectors/member.selectors'
 import { NzMessageService } from 'ng-zorro-antd/message'
-import { iif, of } from 'rxjs'
-import { finalize } from 'rxjs/operators'
+import { iif, interval, Observable, of } from 'rxjs'
+import { filter, finalize, map, mergeMap, takeUntil } from 'rxjs/operators'
 import { HomeService } from './services/home.service'
 import { MemberService } from './services/member.service'
 import { StorageCacheService } from './services/storage-cache.service'
@@ -51,6 +53,14 @@ export class AppComponent implements OnInit {
   loading = false
   // 当前要分享歌曲的信息
   shareInfo!: ShareInfo
+  // 页面标题
+  pageTitle = ''
+  // 页面加载百分比
+  loadPercent = 0
+  // 导航开始事件
+  private navStart$ = <Observable<NavigationStart>>this.router.events.pipe(filter((e) => e instanceof NavigationStart))
+  // 导航结束事件
+  private navEnd$ = <Observable<NavigationEnd>>this.router.events.pipe(filter((e) => e instanceof NavigationEnd))
 
   constructor(
     private homeServ: HomeService,
@@ -58,12 +68,47 @@ export class AppComponent implements OnInit {
     private store$: Store<NgxStoreModule>,
     private batchActionsServ: BatchActionsService,
     private message: NzMessageService,
-    private storageCache: StorageCacheService
+    private storageCache: StorageCacheService,
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+    private titleServ: Title
   ) {}
 
   ngOnInit(): void {
     this.initUserData()
     this.initSubscribe()
+    this.listenRouterEvent()
+    this.setLoadingBar()
+  }
+
+  listenRouterEvent(): void {
+    this.navStart$.subscribe(() => {
+      this.loadPercent = 0
+    })
+    this.navEnd$
+      .pipe(
+        map(() => this.activateRoute),
+        map((route) => {
+          while (route.firstChild) route = route.firstChild
+          return route
+        }),
+        mergeMap((route) => route.data)
+      )
+      .subscribe((data) => {
+        this.loadPercent = 100
+        if (this.pageTitle !== data.title) {
+          this.pageTitle = data.title
+          this.titleServ.setTitle(this.pageTitle)
+        }
+      })
+  }
+
+  setLoadingBar(): void {
+    interval(100)
+      .pipe(takeUntil(this.navEnd$))
+      .subscribe(() => {
+        this.loadPercent = Math.max(95, ++this.loadPercent)
+      })
   }
 
   initUserData(): void {
@@ -185,26 +230,27 @@ export class AppComponent implements OnInit {
   // 登录
   onLogin(params: LoginParams) {
     this.loading = true
-    this.memberServ.login(params).pipe(
-      finalize(() => this.loading = false)
-    ).subscribe(
-      (user) => {
-        this.closeModal()
-        this.message.success('登录成功')
-        this.user = user
-        this.store$.dispatch(SetUserId({ id: String(user.profile.userId) }))
+    this.memberServ
+      .login(params)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(
+        (user) => {
+          this.closeModal()
+          this.message.success('登录成功')
+          this.user = user
+          this.store$.dispatch(SetUserId({ id: String(user.profile.userId) }))
 
-        this.storageCache.set('wyUserId', user.profile.userId)
-        if (params.remember) {
-          this.storageCache.set('wyRememberLogin', codeJson(params))
-        } else {
-          this.storageCache.remove('wyRememberLogin')
+          this.storageCache.set('wyUserId', user.profile.userId)
+          if (params.remember) {
+            this.storageCache.set('wyRememberLogin', codeJson(params))
+          } else {
+            this.storageCache.remove('wyRememberLogin')
+          }
+        },
+        (error) => {
+          this.message.error(error.message || '登录失败')
         }
-      },
-      (error) => {
-        this.message.error(error.message || '登录失败')
-      }
-    )
+      )
   }
 
   // 登出

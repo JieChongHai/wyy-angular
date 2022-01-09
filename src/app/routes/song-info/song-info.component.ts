@@ -21,7 +21,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 export class SongInfoComponent implements OnInit {
   song!: Song
   currentSong?: Song
-  lyric?: BaseLyricLine[]
+  lyric: BaseLyricLine[] = []
 
   controlLyric = {
     isExpand: false,
