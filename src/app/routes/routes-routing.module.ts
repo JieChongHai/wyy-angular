@@ -5,10 +5,6 @@ import { environment } from '@env/environment'
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
-  },
-  {
     path: 'sheet',
     loadChildren: () => import('./sheet-list/sheet-list.module').then((m) => m.SheetListModule),
   },

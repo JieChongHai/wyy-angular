@@ -5,7 +5,7 @@ import { HomeComponent } from './home.component'
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     data: { title: '发现' },
     component: HomeComponent,
     resolve: {
