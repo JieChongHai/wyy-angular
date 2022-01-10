@@ -32,7 +32,7 @@ const CODELEN = 4
 })
 export class WyOtpComponent implements OnInit, ControlValueAccessor, AfterViewInit {
   inputArr = Array(CODELEN).fill('')
-  inputsEl: HTMLElement[] = []
+  inputsEl: HTMLInputElement[] = []
   private code: string = ''
 
   result: string[] = []
@@ -81,6 +81,7 @@ export class WyOtpComponent implements OnInit, ControlValueAccessor, AfterViewIn
       this.result[this.currentFocusIndex] = ''
       this.currentFocusIndex = Math.max(--this.currentFocusIndex, 0)
       this.inputsEl[this.currentFocusIndex].focus()
+      this.inputsEl[this.currentFocusIndex].select()
     }
 
     this.setValue(this.result.join(''))

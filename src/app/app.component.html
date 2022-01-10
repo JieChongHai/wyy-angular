@@ -1,12 +1,13 @@
 <div id="page">
-  <nz-progress
+  <div class="LoadingBar" [ngClass]="{ 'is-active': loadPercent < 100 }"></div>
+  <!-- <nz-progress
     *ngIf="loadPercent < 100"
     nzStrokeWidth="5"
     [nzShowInfo]="false"
     nzStatus="active"
     [nzPercent]="loadPercent"
-  ></nz-progress>
-  
+  ></nz-progress> -->
+
   <nz-layout>
     <nz-header class="header">
       <div class="wrap">
@@ -51,7 +52,7 @@
                 <ul nz-menu nzMode="horizontal" nzTheme="dark">
                   <li nz-submenu>
                     <div title>
-                      <nz-avatar nzIcon="user" [nzSrc]="user?.profile?.avatarUrl"></nz-avatar>
+                      <nz-avatar class="avatar" nzIcon="user" [nzSrc]="user?.profile?.avatarUrl"></nz-avatar>
                       <i nz-icon nzType="down" nzTheme="outline"></i>
                     </div>
                     <ul>

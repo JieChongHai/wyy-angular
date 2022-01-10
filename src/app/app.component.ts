@@ -1,7 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router'
+import {
+  ActivatedRoute,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+} from '@angular/router'
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy'
 import { select, Store } from '@ngrx/store'
 import { SearchResult, Singer, Song, SongSheet } from '@shared/interfaces/common'
@@ -61,6 +68,10 @@ export class AppComponent implements OnInit {
   private navStart$ = <Observable<NavigationStart>>this.router.events.pipe(filter((e) => e instanceof NavigationStart))
   // 导航结束事件
   private navEnd$ = <Observable<NavigationEnd>>this.router.events.pipe(filter((e) => e instanceof NavigationEnd))
+  // 导航终止事件
+  private navError$ = <Observable<NavigationCancel | NavigationError>>(
+    this.router.events.pipe(filter((e) => e instanceof NavigationCancel || e instanceof NavigationError))
+  )
 
   constructor(
     private homeServ: HomeService,
@@ -85,6 +96,7 @@ export class AppComponent implements OnInit {
     this.navStart$.subscribe(() => {
       this.loadPercent = 0
     })
+    
     this.navEnd$
       .pipe(
         map(() => this.activateRoute),
@@ -101,6 +113,11 @@ export class AppComponent implements OnInit {
           this.titleServ.setTitle(this.pageTitle)
         }
       })
+
+    this.navError$.subscribe(() => {
+      this.loadPercent = 100
+      console.warn('导航错误或被取消')
+    })
   }
 
   setLoadingBar(): void {
