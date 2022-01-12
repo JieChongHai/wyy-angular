@@ -6,7 +6,7 @@
     "hmr": "ng s -o --hmr",
     "start": "npm run ng-high-memory serve",
     "build": "npm run ng-high-memory build",
-    "analyze": "npm run ng-high-memory build --stats-json && webpack-bundle-analyzer dist/wyy/stats.json",
+    "analyze": "npm run ng-high-memory build -- --stats-json && webpack-bundle-analyzer dist/stats.json",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng"
