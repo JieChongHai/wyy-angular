@@ -7,7 +7,7 @@ export const API_CONFIG = new InjectionToken('ApiConfigToken');
   declarations: [],
   imports: [],
   providers: [
-    { provide: API_CONFIG, useValue: environment.production ? '/' : '/api' },
+    { provide: API_CONFIG, useValue: environment.production ? '' : '/api' },
   ]
 })
 export class ServicesModule { }
