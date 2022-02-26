@@ -16,27 +16,27 @@
 
 首页
 
-![](.\images\f93d42d9b26e8418ca3e4653f39671a7503d4db8.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/9a1af6d8db1c76a6fec2f30c82d97ab4eb1af3dc.png)
 
 歌单
 
-![](.\images\cc2bd52cfef3c4eef74e2cc8bcf2a77a9cb21d1c.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/cc2bd52cfef3c4eef74e2cc8bcf2a77a9cb21d1c.png)
 
 歌单详情
 
-![](.\images\a8133983e17d8402d100fdf066e575469adc240a.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/a8133983e17d8402d100fdf066e575469adc240a.png)
 
 歌曲
 
-![](.\images\f57167d1afadd67d1b283134c8aebafed41d0dfc.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/f57167d1afadd67d1b283134c8aebafed41d0dfc.png)
 
 播放歌曲
 
-![](.\images\c510e901f1e7d2a69f829407b53c48168ce6a241.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/c510e901f1e7d2a69f829407b53c48168ce6a241.png)
 
 登录注册
 
-![](.\images\9a1af6d8db1c76a6fec2f30c82d97ab4eb1af3dc.png)
+![](https://raw.githubusercontent.com/JieChongHai/wyy-angular/main/images/9a1af6d8db1c76a6fec2f30c82d97ab4eb1af3dc.png)
 
 ###### 代码参考
 
