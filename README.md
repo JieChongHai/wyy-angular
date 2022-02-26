@@ -1,27 +1,45 @@
-# Wyy
+# 备忘录
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.8.
+用到的技术：angular13、angular/cdk13、ng-zorro13、ngrx/store13
 
-## Development server
+后端接口使用版本号为：v3.34.1（NeteaseCloudMusicApi）
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+###### 实现的功能
 
-## Code scaffolding
+- 歌单
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- 歌曲
 
-## Build
+- 会员登录/注册
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- 音乐播放功能
 
-## Running unit tests
+首页
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\f93d42d9b26e8418ca3e4653f39671a7503d4db8.png)
 
-## Running end-to-end tests
+歌单
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\cc2bd52cfef3c4eef74e2cc8bcf2a77a9cb21d1c.png)
 
-## Further help
+歌单详情
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\a8133983e17d8402d100fdf066e575469adc240a.png)
+
+歌曲
+
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\f57167d1afadd67d1b283134c8aebafed41d0dfc.png)
+
+播放歌曲
+
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\c510e901f1e7d2a69f829407b53c48168ce6a241.png)
+
+登录注册
+
+![](C:\Users\JCH\Desktop\学习Angular网易云资料\wyy\images\9a1af6d8db1c76a6fec2f30c82d97ab4eb1af3dc.png)
+
+###### 代码参考
+
+[GitHub - Binaryify/NeteaseCloudMusicApi: 网易云音乐 Node.js API service](https://github.com/Binaryify/NeteaseCloudMusicApi)
+
+[GitHub - lycHub/ng-wyy: angular8+ngrx8 🦌网易云](https://github.com/lycHub/ng-wyy)
