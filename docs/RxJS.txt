@@ -1,0 +1,82 @@
+RxJS
+
+代表流的变量用 $ 符号结尾,是 RxJS 中的一种惯例。
+
+RxJS 有一个核心和三个重点: 
+  一个核心是 Observable 再加上相关的 Operators
+  三个重点分别是 Observer、Subject、Schedulers。
+
+创建 Observable: 
+  要创建一个 Observable,只要给 new Observable 传递一个接收 observer 参数的回调函数,在这个函数中去定义如何发送数据。
+
+观察者 Observer 是一个有三个方法的对象: 
+  next:  当 Observable 发出新的值时被调用,接收这个值作为参数
+  complete: 当 Observable 完结,没有更多数据时被调用。complete 之后,next 方法无效
+  error: 当 Observable 内部发生错误时被调用,之后不会调用 complete,next 方法无效
+Observer 还有简单形式，即不用构建一个对象，而是直接把函数作为 subscribe 方法的参数。
+参数依次为 next 、error、complete，后面两个参数可以省略。
+
+Observable
+  延迟运算:  所有 Observable 一定会等到订阅后才开始对元素做运算,如果没有订阅就不会有运算的行为。
+  渐进式取值:  因为元素是渐进式取得的关系,所以每次的运算是一个元素运算到底,而不是运算完全部的元素再返回。
+Subject
+  Subject 同时是 Observable 又是 Observer
+  Subject 会对内部的 observers 清单进行组播(multicast)
+
+  BehaviorSubject 会记住最新一次发送的元素,并把该元素当作目前的值(需要传入一个参数来代表起始的状态)
+  ReplaySubject 在新订阅时重新发送最后的几个元素(事件的重放)
+  AsyncSubject会在 subject 结束后送出最后一个值(不常用)
+
+  当 observer 订阅到 subject 时,subject 会把订阅者塞到一份订阅者清单,
+  在元素发送时就是在遍历这份清单,并把元素一一送出。
+  
+  订阅一个 Observable 就像是执行一个 function。
+
+Observable
+  from: 将Promise 或者 iterator 的值 ( string、array 等 ) 转换为 Observable
+  fromEvent: 将event转换为 Observable
+  of: 将值转换为 Observable
+  interval: 定时流动的值
+
+  tap: 在不影响流的情况下进行任何处理
+  map / pluck: 流的値的加工・转换・抽出
+  filter: 过滤值
+  skip: 跳过值
+  scan: 使用以前的值
+  take: 确定值流动的次数
+  takeUntil: 值流动时的暂停处理
+  startWith: 指定最初流动的值
+  concatMap: 将值转变成Observable 后合并（执行中的处理结束后转到下一个操作处理）
+  switchMap: 将值转变成Observable 后合并（下一个値过来时,中断正在执行的处理）
+  debounceTime: 弃掉在两次输出之间小于指定时间的发出值
+  throttleTime: 控制值流动的速度
+
+
+不推荐使用 merge、concat、combineLatest、race、zip 这些操作符方法，而是推荐使用对应的静态方法。
+
+过滤的操作符：
+  take 是从数据流中选取最先发出的若干数据
+  takeLast 是从数据流中选取最后发出的若干数据
+  takeUntil 是从数据流中选取直到发生某种情况前发出的若干数据
+  first 是获得满足判断条件的第一个数据
+  last 是获得满足判断条件的最后一个数据
+  skip 是从数据流中忽略最先发出的若干数据
+  skipLast 是从数据流中忽略最后发出的若干数据
+合并类操作符：
+  concat: 保存流的顺序并结合(顺序)
+  merge: 合并流动的值(同时)
+
+  concatAll、mergeAll、switchAll
+  用来将高阶的 Observable 对象压平成一阶的 Observable
+  concatMap、mergeMap、switchMap
+  其实就是map + concatAll、mergeAll、switchAll
+
+  zip 有拉链的意思，这个操作符和拉链的相似之处在于数据一定是一一对应的。
+  withLatestFrom: 与合并后流最新的值进行合并
+  combineLatest: 如果对主流和合成流都进行了更改,则会发送每个流的最新值
+
+  startWith 是在 Observable 的一开始加入初始数据，同步立即发送，常用来提供初始状态。
+  forkJoin 只有静态方法形式，类似 Promise.all ，它会等内部所有 Observable 都完结之后，
+  将所有 Observable 对象最后发出来的最后一个数据合并成 Observable。
+  race 操作符产生的 Observable 会完全镜像最先吐出数据的 Observable。
+
