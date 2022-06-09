@@ -21,7 +21,8 @@ app.use(express.static("dist"))
 
 // 路径以 '/' 的配置
 const apiProxy = createProxyMiddleware('/**', {
-  target: "http://localhost:3000",
+  // target: "http://localhost:3000",
+  target: "http://123.207.32.32:9001/",
   changeOrigin: true
 });
 
