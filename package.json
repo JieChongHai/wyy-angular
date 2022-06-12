@@ -4,13 +4,11 @@
   "scripts": {
     "ng": "ng",
     "hmr": "ng s -o --hmr",
-    "start": "npm run ng-high-memory serve",
+    "serve": "node server.js",
+    "test": "ng test",
     "build": "npm run ng-high-memory build",
     "analyze": "npm run ng-high-memory build -- --stats-json && webpack-bundle-analyzer dist/stats.json",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
-    "serve": "node server.js"
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng"
   },
   "private": true,
   "dependencies": {

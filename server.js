@@ -4,13 +4,15 @@ const { createProxyMiddleware } = require("http-proxy-middleware")
 const history = require('connect-history-api-fallback');
 
 const PORT = 8080
+// const TARGET = "http://localhost:3000/"
+const TARGET = "http://123.207.32.32:9001/"
 
 const app = express()
 app.use(compression())
 app.use(history()); 
 app.use(express.static("dist"))
 
-// 路径以 '/api' 的配置
+// 路径以 '/api' 的配置(development)
 // const apiProxy = createProxyMiddleware("/api/**", {
 //   target: "http://localhost:3000",
 //   changeOrigin: true,
@@ -19,10 +21,9 @@ app.use(express.static("dist"))
 //   },
 // })
 
-// 路径以 '/' 的配置
+// 路径以 '/' 的配置(production)
 const apiProxy = createProxyMiddleware('/**', {
-  // target: "http://localhost:3000",
-  target: "http://123.207.32.32:9001/",
+  target: TARGET,
   changeOrigin: true
 });
 
@@ -31,6 +32,6 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log("err :", err)
   } else {
-    console.log("Listen at http://localhost:" + PORT)
+    console.log(`Listen at ${TARGET}`)
   }
 })

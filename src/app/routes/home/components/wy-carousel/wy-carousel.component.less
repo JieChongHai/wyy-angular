@@ -1,18 +1,24 @@
+@dot-width: 20px;
 .carousel{
   padding: 10px 0;
-  background-color: #001529;
+  // background-color: #001529;
+  background-size: 6000px;
+  background-position: center center;
   .wrap{
     position: relative;
     ::ng-deep .dot{
       display: block;
-      width: 20px;
-      height: 20px;
+      width: @dot-width;
+      height: @dot-width;
       overflow: hidden;
       background: url('../../../../../assets/images/banner.png') 3px -343px;
       cursor: pointer;
       &.active{
         background-position: -16px -343px;
       }
+    }
+    ::ng-deep .slick-dots li {
+      width: @dot-width;
     }
     .arrow{
       display: block;

@@ -506,4 +506,6 @@ source$.subscribe((data) => {
 
 ## 参考文章
 
-> [打通 RxJS 任督二脈 系列](https://ithelp.ithome.com.tw/users/20020617/ironman/2959)
+>  [打通 RxJS 任督二脈 系列](https://ithelp.ithome.com.tw/users/20020617/ironman/2959)
+>  [弹珠图网站](https://rxmarbles.com/)
+>  [学习操作符](https://reactive.how/)

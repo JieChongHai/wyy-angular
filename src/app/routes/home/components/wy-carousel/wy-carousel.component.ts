@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { Banner } from '@shared/interfaces/common';
 
 export type ArrowType = 'pre' | 'next'
 
@@ -15,10 +16,16 @@ export type ArrowType = 'pre' | 'next'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WyCarouselComponent {
-  @Input() activeIndex = 0;
+  @Input() activeIndex:number = 0;
+  @Input() banners: Banner[] = [];
   @Output() changeSlide = new EventEmitter<ArrowType>();
 
-  constructor() {}
+  get carouselStyles(): Record<string, string> {
+    const { imageUrl } = this.banners[this.activeIndex];
+    return {
+      'background-image': `url(${imageUrl}?imageView&blur=40x20)`,
+    }
+  }
 
   onChangeSlide(type: ArrowType) {
     this.changeSlide.emit(type);
