@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { ShareParams } from '@shared/interfaces/member'
 import { NgChanges } from '@shared/interfaces/utils'
 import { ShareInfo } from '@store/reducers/member.reducer'
@@ -19,9 +19,9 @@ export class WyLayerShareComponent implements OnInit {
   /** 分享 */
   @Output() share = new EventEmitter<ShareParams>()
 
-  validateForm: FormGroup = this.fb.group({})
+  validateForm: UntypedFormGroup = this.fb.group({})
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: UntypedFormBuilder) {}
 
   ngOnChanges(changes: NgChanges<WyLayerShareComponent>): void {
     if (changes.visible) {

@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
   OnChanges,
 } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
 import { NgChanges } from '@shared/interfaces/utils'
 import { ModalTypes } from '@store/reducers/member.reducer'
 import { NzMessageService } from 'ng-zorro-antd/message'
@@ -30,7 +30,7 @@ enum ExistTxt {
 })
 export class WyLayerRegisterComponent implements OnChanges {
   ModalTypes = ModalTypes
-  validateForm!: FormGroup
+  validateForm!: UntypedFormGroup
   // 是否展示验证码页面
   showOtp = false
   // 倒计时
@@ -44,12 +44,12 @@ export class WyLayerRegisterComponent implements OnChanges {
   /** 用户注册 */
   @Output() register = new EventEmitter<string>()
 
-  get phoneCtrl(): FormControl {
-    return this.validateForm.get('phone') as FormControl
+  get phoneCtrl(): UntypedFormControl {
+    return this.validateForm.get('phone') as UntypedFormControl
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private memberServ: MemberService,
     private message: NzMessageService,
     private cdr: ChangeDetectorRef

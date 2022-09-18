@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { SongSheet } from '@shared/interfaces/common'
 import { ICreateSheet, LikeSongParams } from '@shared/interfaces/member'
 import { NgChanges } from '@shared/interfaces/utils'
@@ -23,9 +23,9 @@ export class WyLayerLikeComponent {
   @Output() createSheet = new EventEmitter<ICreateSheet>()
   // 是否是先创建歌单再收藏歌曲
   creating = false
-  validateForm: FormGroup = this.fb.group({})
+  validateForm: UntypedFormGroup = this.fb.group({})
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.initForm()
   }
 

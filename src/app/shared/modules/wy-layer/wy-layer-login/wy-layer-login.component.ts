@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input, OnChanges, OnInit, ChangeDetectorRef } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { LoginParams } from '@shared/interfaces/member'
 import { NgChanges } from '@shared/interfaces/utils'
 import { ModalTypes } from '@store/reducers/member.reducer'
@@ -14,7 +14,7 @@ import { codeJson } from 'src/app/shared/untils/base64'
 })
 export class WyLayerLoginComponent implements OnChanges {
   ModalTypes = ModalTypes
-  validateForm!: FormGroup
+  validateForm!: UntypedFormGroup
   /** 弹框内容的显隐状态 */
   @Input() visible: boolean = false
   /** 初始化表单需要的参数 */
@@ -37,7 +37,7 @@ export class WyLayerLoginComponent implements OnChanges {
     }
   }
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
     this.initForm()
   }
 

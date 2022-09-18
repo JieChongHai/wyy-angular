@@ -8,7 +8,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
 
 type FormControlStatus = 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'
 
@@ -21,7 +21,7 @@ type FormControlStatus = 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'
 export class WyCheckCodeComponent implements OnInit, OnChanges {
   private _phone = ''
 
-  validateForm!: FormGroup
+  validateForm!: UntypedFormGroup
   showRepeatBtn = false
   showErrorTip = false
   /** 验证码是否正确 */
@@ -48,11 +48,11 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   /** 校验手机号是否已注册*/
   @Output() checkExist = new EventEmitter<void>()
 
-  get codeCtrl(): FormControl {
-    return this.validateForm.get('code') as FormControl
+  get codeCtrl(): UntypedFormControl {
+    return this.validateForm.get('code') as UntypedFormControl
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.initForm()
   }
 
