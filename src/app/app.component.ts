@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
   // 弹窗loading
   loading = false
   // 当前要分享歌曲的信息
-  shareInfo!: ShareInfo
+  shareInfo?: ShareInfo
   // 页面标题
   pageTitle = ''
   // 页面加载百分比
@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
     this.navStart$.subscribe(() => {
       this.loadPercent = 0
     })
-    
+
     this.navEnd$
       .pipe(
         map(() => this.activateRoute),

@@ -11,7 +11,7 @@ import { ShareInfo } from '@store/reducers/member.reducer'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WyLayerShareComponent implements OnInit {
-  @Input() shareInfo!: ShareInfo
+  @Input() shareInfo?: ShareInfo
   /** 弹框内容的显隐状态 */
   @Input() visible: boolean = false
   /** 取消操作 */
@@ -44,9 +44,9 @@ export class WyLayerShareComponent implements OnInit {
   submitForm(): void {
     if (this.validateForm.valid) {
       this.share.emit({
-        id: this.shareInfo.id,
+        id: this.shareInfo!.id,
         msg: this.validateForm.get('msg')!.value,
-        type: this.shareInfo.type,
+        type: this.shareInfo!.type,
       })
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {

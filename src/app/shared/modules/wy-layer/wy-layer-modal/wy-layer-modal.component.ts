@@ -22,7 +22,6 @@ import {
   OnChanges,
 } from '@angular/core'
 import { ModalTypes } from '@store/reducers/member.reducer'
-import { OverlayReference } from '@angular/cdk/overlay/overlay-reference'
 import { BatchActionsService } from '@store/batch-actions.service'
 import { DOCUMENT, isPlatformBrowser } from '@angular/common'
 import { animate, state, style, transition, trigger } from '@angular/animations'
@@ -131,14 +130,14 @@ export class WyLayerModalComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.modalVisible) {
       this.scrollStrategy.enable()
       this.showModal = EShowModalState.Show
-      this.overlayKeyboardDispatcher.add(this.overlayRef as OverlayReference)
+      this.overlayKeyboardDispatcher.add(this.overlayRef as OverlayRef)
 
       this.listenResizeToCenter()
       this.changePointerEvents(EPointerEvent.Auto)
     } else {
       this.scrollStrategy.disable()
       this.showModal = EShowModalState.Hide
-      this.overlayKeyboardDispatcher.remove(this.overlayRef as OverlayReference)
+      this.overlayKeyboardDispatcher.remove(this.overlayRef as OverlayRef)
 
       this.resizeHandler && this.resizeHandler()
       this.changePointerEvents(EPointerEvent.None)
