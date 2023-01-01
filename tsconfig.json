@@ -15,20 +15,33 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "lib": [
       "es2018",
       "dom"
     ],
     "paths": {
-      "@shared": ["src/app/shared/index"],
-      "@shared/interfaces/*": ["src/app/shared/interfaces/*"],
-      "@shared/untils": ["src/app/shared/untils/index"],
-      "@store/*": ["src/app/store/*"],
-      "@core": ["src/app/core/index"],
-      "@env/*": ["src/environments/*"]
-    }
+      "@shared": [
+        "src/app/shared/index"
+      ],
+      "@shared/interfaces/*": [
+        "src/app/shared/interfaces/*"
+      ],
+      "@shared/untils": [
+        "src/app/shared/untils/index"
+      ],
+      "@store/*": [
+        "src/app/store/*"
+      ],
+      "@core": [
+        "src/app/core/index"
+      ],
+      "@env/*": [
+        "src/environments/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
