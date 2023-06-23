@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Resolve } from '@angular/router'
+
 import { forkJoin, Observable } from 'rxjs'
 import { HomeService } from 'src/app/services/home.service'
 import { SingerService } from 'src/app/services/singer.service'
@@ -10,7 +10,7 @@ export type HomeData = [Banner[], HotTag[], SongSheet[], Singer[]]
 @Injectable({
   providedIn: 'root',
 })
-export class HomeResolverService implements Resolve<HomeData> {
+export class HomeResolverService  {
   constructor(private homeServ: HomeService, private singerServ: SingerService) {}
 
   resolve(): Observable<HomeData> {

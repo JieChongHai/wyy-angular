@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
+import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { EMPTY, forkJoin, Observable } from 'rxjs'
 import { MemberService } from 'src/app/services/member.service'
 import { RecordVal, User, UserSheet } from '@shared/interfaces/member'
@@ -9,7 +9,7 @@ export type CenterData = [User, RecordVal[], UserSheet]
 @Injectable({
   providedIn: 'root',
 })
-export class memberResolverService implements Resolve<CenterData> {
+export class memberResolverService  {
   constructor(private router: Router, private memberServ: MemberService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CenterData> {

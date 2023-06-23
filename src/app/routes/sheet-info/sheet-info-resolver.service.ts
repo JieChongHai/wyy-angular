@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router'
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
 import { SongSheet } from '@shared/interfaces/common'
 import { Observable } from 'rxjs'
 import { SheetService } from 'src/app/services/sheet.service'
 
 @Injectable()
-export class SheetInfoResolverService implements Resolve<SongSheet> {
+export class SheetInfoResolverService  {
   constructor(private sheetServ: SheetService) {}
 
   resolve(
