@@ -2,6 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "suppressImplicitAnyIndexErrors": true,
